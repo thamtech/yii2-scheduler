@@ -1,13 +1,13 @@
 <?php
-namespace webtoolsnz\scheduler\actions;
+namespace thamtech\scheduler\actions;
 
 use Yii;
 use yii\base\Action;
-use webtoolsnz\scheduler\models\SchedulerLog;
+use thamtech\scheduler\models\SchedulerLog;
 
 /**
  * Class UpdateAction
- * @package webtoolsnz\scheduler\actions
+ * @package thamtech\scheduler\actions
  */
 class ViewLogAction extends Action
 {

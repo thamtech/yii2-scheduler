@@ -1,16 +1,16 @@
 <?php
-namespace webtoolsnz\scheduler;
+namespace thamtech\scheduler;
 
 use Yii;
-use webtoolsnz\scheduler\events\TaskEvent;
-use webtoolsnz\scheduler\models\SchedulerLog;
-use webtoolsnz\scheduler\models\SchedulerTask;
+use thamtech\scheduler\events\TaskEvent;
+use thamtech\scheduler\models\SchedulerLog;
+use thamtech\scheduler\models\SchedulerTask;
 
 /**
  * Class TaskRunner
  *
- * @package webtoolsnz\scheduler
- * @property \webtoolsnz\scheduler\Task $task
+ * @package thamtech\scheduler
+ * @property \thamtech\scheduler\Task $task
  */
 class TaskRunner extends \yii\base\Component
 {
@@ -24,12 +24,12 @@ class TaskRunner extends \yii\base\Component
     /**
      * The task that will be executed.
      *
-     * @var \webtoolsnz\scheduler\Task
+     * @var \thamtech\scheduler\Task
      */
     private $_task;
 
     /**
-     * @var \webtoolsnz\scheduler\models\SchedulerLog
+     * @var \thamtech\scheduler\models\SchedulerLog
      */
     private $_log;
 
@@ -55,7 +55,7 @@ class TaskRunner extends \yii\base\Component
     }
 
     /**
-     * @param \webtoolsnz\scheduler\models\SchedulerLog $log
+     * @param \thamtech\scheduler\models\SchedulerLog $log
      */
     public function setLog($log)
     {
@@ -109,14 +109,14 @@ class TaskRunner extends \yii\base\Component
     }
 
     /**
-     * If the yii error handler has been overridden with `\webtoolsnz\scheduler\ErrorHandler`,
+     * If the yii error handler has been overridden with `\thamtech\scheduler\ErrorHandler`,
      * pass it this instance of TaskRunner, so it can update the state of tasks in the event of a fatal error.
      */
     public function shutdownHandler()
     {
         $errorHandler = Yii::$app->getErrorHandler();
 
-        if ($errorHandler instanceof \webtoolsnz\scheduler\ErrorHandler) {
+        if ($errorHandler instanceof \thamtech\scheduler\ErrorHandler) {
             Yii::$app->getErrorHandler()->taskRunner = $this;
         }
     }

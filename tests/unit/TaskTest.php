@@ -1,9 +1,9 @@
 <?php
 
-namespace webtoolsnz\scheduler\tests;
+namespace thamtech\scheduler\tests;
 
-use \webtoolsnz\scheduler\tests\tasks\AlphabetTask;
-use \webtoolsnz\scheduler\models\SchedulerTask;
+use \thamtech\scheduler\tests\tasks\AlphabetTask;
+use \thamtech\scheduler\models\SchedulerTask;
 use \yii\codeception\TestCase;
 use AspectMock\Test as test;
 

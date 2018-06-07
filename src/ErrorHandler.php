@@ -1,10 +1,10 @@
 <?php
 
-namespace webtoolsnz\scheduler;
+namespace thamtech\scheduler;
 
 /**
  * Class ErrorHandler
- * @package webtoolsnz\scheduler
+ * @package thamtech\scheduler
  */
 class ErrorHandler extends \yii\console\ErrorHandler
 {

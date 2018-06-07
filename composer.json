@@ -1,10 +1,9 @@
 {
-  "name": "webtoolsnz/yii2-scheduler",
-  "description": "A scheduled task runner for Yii2 applications",
+  "name": "thamtech/yii2-scheduler",
+  "description": "A configuration-driven scheduled task runner for Yii2 applications",
   "keywords": ["yii2", "cron", "scheduler", "task"],
   "type": "yii2-extension",
-  "license": "proprietary",
-  "homepage": "https://github.com/webtoolsnz/yii2-scheduler",
+  "license": "MIT",
   "authors": [
     {
       "name": "Byron Adams",
@@ -15,6 +14,10 @@
       "email": "support@webtools.co.nz",
       "homepage": "http://www.webtools.co.nz",
       "role": "Developer"
+    },
+    {
+      "name": "Tyler Ham",
+      "email": "tyler@thamtech.com"
     }
   ],
   "require": {
@@ -32,8 +35,8 @@
   },
   "autoload": {
     "psr-4": {
-      "webtoolsnz\\scheduler\\": "src",
-      "webtoolsnz\\scheduler\\tests\\": "tests"
+      "thamtech\\scheduler\\": "src",
+      "thamtech\\scheduler\\tests\\": "tests"
     }
   }
 }

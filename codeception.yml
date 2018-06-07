@@ -1,4 +1,4 @@
-namespace: webtoolsnz\scheduler\tests
+namespace: thamtech\scheduler\tests
 actor: Tester
 paths:
     tests: tests

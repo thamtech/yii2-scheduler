@@ -1,11 +1,11 @@
 <?php
-namespace webtoolsnz\scheduler\tests\tasks;
+namespace thamtech\scheduler\tests\tasks;
 
 /**
  * Class ErrorTask
- * @package webtoolsnz\scheduler\tests\tasks
+ * @package thamtech\scheduler\tests\tasks
  */
-class ErrorTask extends \webtoolsnz\scheduler\Task
+class ErrorTask extends \thamtech\scheduler\Task
 {
     public $description = 'Throws an Error';
     public $schedule = '*/1 * * * *';

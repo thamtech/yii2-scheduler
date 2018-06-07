@@ -1,16 +1,16 @@
 <?php
 
 
-namespace webtoolsnz\scheduler;
+namespace thamtech\scheduler;
 
-use webtoolsnz\scheduler\events\TaskEvent;
-use webtoolsnz\scheduler\models\SchedulerTask;
+use thamtech\scheduler\events\TaskEvent;
+use thamtech\scheduler\models\SchedulerTask;
 use yii\helpers\StringHelper;
 use Cron\CronExpression;
 
 /**
  * Class Task
- * @package webtoolsnz\scheduler
+ * @package thamtech\scheduler
  */
 abstract class Task extends \yii\base\Component
 {

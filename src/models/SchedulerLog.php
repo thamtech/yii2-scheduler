@@ -1,13 +1,13 @@
 <?php
 
-namespace webtoolsnz\scheduler\models;
+namespace thamtech\scheduler\models;
 
 use Yii;
 
 /**
  * This is the model class for table "scheduler_log".
  */
-class SchedulerLog extends \webtoolsnz\scheduler\models\base\SchedulerLog
+class SchedulerLog extends \thamtech\scheduler\models\base\SchedulerLog
 {
     public function __toString()
     {

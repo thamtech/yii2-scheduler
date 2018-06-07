@@ -1,6 +1,6 @@
 <?php
 
-namespace webtoolsnz\scheduler\models\base;
+namespace thamtech\scheduler\models\base;
 
 use Yii;
 use yii\data\ActiveDataProvider;
@@ -15,7 +15,7 @@ use yii\data\ActiveDataProvider;
  * @property string $output
  * @property integer $error
  *
- * @property \webtoolsnz\scheduler\models\SchedulerTask $schedulerTask
+ * @property \thamtech\scheduler\models\SchedulerTask $schedulerTask
  */
 class SchedulerLog extends \yii\db\ActiveRecord
 {
@@ -76,7 +76,7 @@ class SchedulerLog extends \yii\db\ActiveRecord
      */
     public function getSchedulerTask()
     {
-        return $this->hasOne(\webtoolsnz\scheduler\models\SchedulerTask::className(), ['id' => 'scheduler_task_id']);
+        return $this->hasOne(\thamtech\scheduler\models\SchedulerTask::className(), ['id' => 'scheduler_task_id']);
     }
 
     /**

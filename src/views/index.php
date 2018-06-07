@@ -4,14 +4,14 @@
  *
  * @var \yii\web\View $this
  * @var \yii\data\ActiveDataProvider $dataProvider
- * @var \webtoolsnz\scheduler\models\SchedulerTask $model
+ * @var \thamtech\scheduler\models\SchedulerTask $model
  */
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\GridView;
 
 
-$this->title = \webtoolsnz\scheduler\models\SchedulerTask::label(2);
+$this->title = \thamtech\scheduler\models\SchedulerTask::label(2);
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 

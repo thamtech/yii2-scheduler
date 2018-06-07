@@ -1,12 +1,23 @@
-# yii2-scheduler
+Yii2 Scheduler
+==============
 
-[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
-[![Build Status](https://img.shields.io/travis/webtoolsnz/yii2-scheduler/master.svg?style=flat-square)](https://travis-ci.org/webtoolsnz/yii2-scheduler)
-[![Coverage Status](https://img.shields.io/scrutinizer/coverage/g/webtoolsnz/yii2-scheduler.svg?style=flat-square)](https://scrutinizer-ci.com/g/webtoolsnz/yii2-scheduler/code-structure)
-[![Quality Score](https://img.shields.io/scrutinizer/g/webtoolsnz/yii2-scheduler.svg?style=flat-square)](https://scrutinizer-ci.com/g/webtoolsnz/yii2-scheduler)
+A configurable scheduled task manager for [Yii2](http://www.yiiframework.com).
 
+This is adapted from [webtoolsnz/yii2-scheduler](https://github.com/webtoolsnz/yii2-scheduler)
+to provide a more configuration-driven approach.
 
-A scheduled task manager for yii2
+A few differences:
+
+* webtoolsnz/yii2-scheduler
+   * automatically picks up Task classes in the `@app/tasks` folder
+   * once tasks have been established in the database table, the `active` value
+     from the database controls whether the task is enabled, not the `active`
+     property in the Task class
+* thamtech/yii2-scheduler
+   * tasks are defined explicitly as part of the scheduler module config
+   * the `active` property of the Task instance controls whether the task is
+     enabled (so that it may be controlled programmatically instead of only via
+     the scheduler's databse table)
 
 ## Installation
 
@@ -14,21 +25,21 @@ The preferred way to install this extension is through [composer](http://getcomp
 
 Install using the following command.
 
-~~~bash
-$ composer require webtoolsnz/yii2-scheduler
-~~~
+```bash
+$ composer require thamtech/yii2-scheduler
+```
 
 Now that the  package has been installed you need to configure the module in your application
 
 The `config/console.php` file should be updated to reflect the changes below
-~~~php
+```php
     'bootstrap' => ['log', 'scheduler'],
     'modules' => [
-        'scheduler' => ['class' => 'webtoolsnz\scheduler\Module'],
+        'scheduler' => ['class' => 'thamtech\scheduler\Module'],
     ],
     'components' => [
         'errorHandler' => [
-            'class' => 'webtoolsnz\scheduler\ErrorHandler'
+            'class' => 'thamtech\scheduler\ErrorHandler'
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
@@ -48,13 +59,13 @@ The `config/console.php` file should be updated to reflect the changes below
             ],
         ],
     ]
-~~~
+```
 
 also add this to the top of your `config/console.php` file
-~~~php
+```php
 \yii\base\Event::on(
-    \webtoolsnz\scheduler\console\SchedulerController::className(),
-    \webtoolsnz\scheduler\events\SchedulerEvent::EVENT_AFTER_RUN,
+    \thamtech\scheduler\console\SchedulerController::className(),
+    \thamtech\scheduler\events\SchedulerEvent::EVENT_AFTER_RUN,
     function ($event) {
         if (!$event->success) {
             foreach($event->exceptions as $exception) {
@@ -63,26 +74,26 @@ also add this to the top of your `config/console.php` file
         }
     }
 );
-~~~
+```
 
 To implement the GUI for scheduler also add the following to your `config/web.php`
-~~~php
+```php
     'bootstrap' => ['log', 'scheduler'],
     'modules' => [
-        'scheduler' => ['class' => 'webtoolsnz\scheduler\Module'],
+        'scheduler' => ['class' => 'thamtech\scheduler\Module'],
     ],
-~~~
+```
 
 After the configuration files have been updated, a `tasks` directory will need to be created in the root of your project.
 
 
 Run the database migrations, which will create the necessary tables for `scheduler`
-~~~bash
-php yii migrate up --migrationPath=vendor/webtoolsnz/yii2-scheduler/src/migrations
-~~~
+```bash
+php yii migrate up --migrationPath=vendor/thamtech/yii2-scheduler/src/migrations
+```
 
 Add a controller
-~~~php
+```php
 <?php
 
 namespace app\modules\admin\controllers;
@@ -99,28 +110,28 @@ class SchedulerController extends Controller
     {
         return [
             'index' => [
-                'class' => 'webtoolsnz\scheduler\actions\IndexAction',
+                'class' => 'thamtech\scheduler\actions\IndexAction',
                 'view' => '@scheduler/views/index',
             ],
             'update' => [
-                'class' => 'webtoolsnz\scheduler\actions\UpdateAction',
+                'class' => 'thamtech\scheduler\actions\UpdateAction',
                 'view' => '@scheduler/views/update',
             ],
             'view-log' => [
-                'class' => 'webtoolsnz\scheduler\actions\ViewLogAction',
+                'class' => 'thamtech\scheduler\actions\ViewLogAction',
                 'view' => '@scheduler/views/view-log',
             ],
         ];
     }
 }
-~~~
+```
 
 ## Example Task
 
 You can now create your first task using scheduler, create the file `AlphabetTask.php` inside the `tasks` directory in your project root.
 
 Paste the below code into your task:
-~~~php
+```php
 <?php
 namespace app\tasks;
 
@@ -128,7 +139,7 @@ namespace app\tasks;
  * Class AlphabetTask
  * @package app\tasks
  */
-class AlphabetTask extends \webtoolsnz\scheduler\Task
+class AlphabetTask extends \thamtech\scheduler\Task
 {
     public $description = 'Prints the alphabet';
     public $schedule = '0 * * * *';
@@ -139,7 +150,7 @@ class AlphabetTask extends \webtoolsnz\scheduler\Task
         }
     }
 }
-~~~
+```
 
 The above code defines a simple task that runs at the start of every hour, and prints the alphabet.
 
@@ -191,7 +202,7 @@ Event::on(AlphabetTask::className(), AlphabetTask::EVENT_AFTER_RUN, function ($e
 or at the global level, to throw errors in `/yii`
 
 ```php
-$application->on(\webtoolsnz\scheduler\events\SchedulerEvent::EVENT_AFTER_RUN, function ($event) {
+$application->on(\thamtech\scheduler\events\SchedulerEvent::EVENT_AFTER_RUN, function ($event) {
     if (!$event->success) {
         foreach($event->exceptions as $exception) {
             throw $exception;

@@ -1,6 +1,6 @@
 <?php
 
-namespace webtoolsnz\scheduler\models;
+namespace thamtech\scheduler\models;
 
 use Yii;
 use yii\helpers\Inflector;
@@ -8,7 +8,7 @@ use yii\helpers\Inflector;
 /**
  * This is the model class for table "scheduler_task".
  */
-class SchedulerTask extends \webtoolsnz\scheduler\models\base\SchedulerTask
+class SchedulerTask extends \thamtech\scheduler\models\base\SchedulerTask
 {
     const STATUS_INACTIVE = 0;
     const STATUS_PENDING = 10;

@@ -1,13 +1,13 @@
 <?php
 
-namespace webtoolsnz\scheduler\tests;
+namespace thamtech\scheduler\tests;
 
 use Codeception\Util\Stub;
-use \webtoolsnz\scheduler\tests\tasks\AlphabetTask;
-use \webtoolsnz\scheduler\TaskRunner;
-use \webtoolsnz\scheduler\models\SchedulerTask;
-use \webtoolsnz\scheduler\models\SchedulerLog;
-use webtoolsnz\scheduler\tests\tasks\ErrorTask;
+use \thamtech\scheduler\tests\tasks\AlphabetTask;
+use \thamtech\scheduler\TaskRunner;
+use \thamtech\scheduler\models\SchedulerTask;
+use \thamtech\scheduler\models\SchedulerLog;
+use thamtech\scheduler\tests\tasks\ErrorTask;
 use \yii\codeception\TestCase;
 
 class TaskRunnerTest extends TestCase

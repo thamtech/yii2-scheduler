@@ -1,12 +1,12 @@
 <?php
 
-namespace webtoolsnz\scheduler\console;
+namespace thamtech\scheduler\console;
 
-use webtoolsnz\scheduler\events\SchedulerEvent;
-use webtoolsnz\scheduler\models\base\SchedulerLog;
-use webtoolsnz\scheduler\models\SchedulerTask;
-use webtoolsnz\scheduler\Task;
-use webtoolsnz\scheduler\TaskRunner;
+use thamtech\scheduler\events\SchedulerEvent;
+use thamtech\scheduler\models\base\SchedulerLog;
+use thamtech\scheduler\models\SchedulerTask;
+use thamtech\scheduler\Task;
+use thamtech\scheduler\TaskRunner;
 use Yii;
 use yii\base\InvalidParamException;
 use yii\console\Controller;
@@ -71,7 +71,7 @@ class SchedulerController extends Controller
     }
 
     /**
-     * @return \webtoolsnz\scheduler\Module
+     * @return \thamtech\scheduler\Module
      */
     private function getScheduler()
     {

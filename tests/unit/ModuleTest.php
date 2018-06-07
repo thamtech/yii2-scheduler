@@ -1,6 +1,6 @@
 <?php
 
-namespace webtoolsnz\scheduler\tests;
+namespace thamtech\scheduler\tests;
 
 use Yii;
 use \yii\codeception\TestCase;
@@ -13,9 +13,9 @@ class ModuleTest extends TestCase
     public function testGetTasks()
     {
         $module = Yii::createObject([
-            'class' => '\webtoolsnz\scheduler\Module',
+            'class' => '\thamtech\scheduler\Module',
             'taskPath' => '@tests/tasks',
-            'taskNameSpace' => '\webtoolsnz\scheduler\tests\tasks'
+            'taskNameSpace' => '\thamtech\scheduler\tests\tasks'
         ], ['scheduler']);
 
         $tasks = $module->getTasks();
@@ -32,7 +32,7 @@ class ModuleTest extends TestCase
         $this->setExpectedException('ErrorException');
 
         $module = Yii::createObject([
-            'class' => '\webtoolsnz\scheduler\Module',
+            'class' => '\thamtech\scheduler\Module',
             'taskPath' => '@tests/some/random/path',
         ], ['scheduler']);
 
