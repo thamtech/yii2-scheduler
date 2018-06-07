@@ -29,9 +29,13 @@ Install using the following command.
 $ composer require thamtech/yii2-scheduler
 ```
 
-Now that the  package has been installed you need to configure the module in your application
+Now that the  package has been installed you need to configure the module in
+your application
 
-The `config/console.php` file should be updated to reflect the changes below
+The `config/console.php` file (or the equivalent console config file if you are
+using a different Yii project template) should be updated to reflect the changes
+below
+
 ```php
     'bootstrap' => ['log', 'scheduler'],
     'modules' => [
@@ -62,6 +66,7 @@ The `config/console.php` file should be updated to reflect the changes below
 ```
 
 also add this to the top of your `config/console.php` file
+
 ```php
 \yii\base\Event::on(
     \thamtech\scheduler\console\SchedulerController::className(),
@@ -76,7 +81,10 @@ also add this to the top of your `config/console.php` file
 );
 ```
 
-To implement the GUI for scheduler also add the following to your `config/web.php`
+To implement the GUI for scheduler also add the following to your
+`config/web.php` (or the equivalent web config file if you are
+using a different Yii project template)
+
 ```php
     'bootstrap' => ['log', 'scheduler'],
     'modules' => [
@@ -84,8 +92,8 @@ To implement the GUI for scheduler also add the following to your `config/web.ph
     ],
 ```
 
-After the configuration files have been updated, a `tasks` directory will need to be created in the root of your project.
-
+After the configuration files have been updated, a `tasks` directory will need
+to be created in the root of your project.
 
 Run the database migrations, which will create the necessary tables for `scheduler`
 ```bash
@@ -93,6 +101,7 @@ php yii migrate up --migrationPath=vendor/thamtech/yii2-scheduler/src/migrations
 ```
 
 Add a controller
+
 ```php
 <?php
 
@@ -128,9 +137,11 @@ class SchedulerController extends Controller
 
 ## Example Task
 
-You can now create your first task using scheduler, create the file `AlphabetTask.php` inside the `tasks` directory in your project root.
+You can now create your first task using scheduler, create the file
+`AlphabetTask.php` inside the `tasks` directory in your project root.
 
 Paste the below code into your task:
+
 ```php
 <?php
 namespace app\tasks;
@@ -152,9 +163,11 @@ class AlphabetTask extends \thamtech\scheduler\Task
 }
 ```
 
-The above code defines a simple task that runs at the start of every hour, and prints the alphabet.
+The above code defines a simple task that runs at the start of every hour, and
+prints the alphabet.
 
-The `$schedule` property of this class defines how often the task will run, these are simply [Cron Expression](http://en.wikipedia.org/wiki/Cron#Examples)
+The `$schedule` property of this class defines how often the task will run,
+these are simply [Cron Expression](http://en.wikipedia.org/wiki/Cron#Examples)
 
 
 ### Running the tasks
@@ -186,7 +199,8 @@ In order to have your tasks run automatically simply setup a crontab like so
 
 ### Events & Errors
 
-Events are thrown before and running individual tasks as well as at a global level for multiple tasks
+Events are thrown before and running individual tasks as well as at a global
+level for multiple tasks
 
 Task Level
 
@@ -211,7 +225,8 @@ $application->on(\thamtech\scheduler\events\SchedulerEvent::EVENT_AFTER_RUN, fun
 });
 ```
 
-You could throw the exceptions at the task level, however this will prevent further tasks from running.
+You could throw the exceptions at the task level, however this will prevent
+further tasks from running.
 
 ## License
 
