@@ -1,5 +1,4 @@
 <?php
-
 namespace thamtech\scheduler\console;
 
 use thamtech\scheduler\events\SchedulerEvent;
@@ -26,20 +25,17 @@ use yii\helpers\Console;
 class SchedulerController extends Controller
 {
     /**
-     * Force pending tasks to run.
-     * @var bool
+     * @var bool Force pending tasks to run.
      */
     public $force = false;
 
     /**
-     * Name of the task to run
-     * @var null|string
+     * @var null|string Name of the task to run
      */
     public $taskName;
 
     /**
-     * Colour map for SchedulerTask status ids
-     * @var array
+     * @var array Colour map for SchedulerTask status ids
      */
     private $_statusColors = [
         SchedulerTask::STATUS_PENDING => Console::FG_BLUE,
@@ -51,6 +47,7 @@ class SchedulerController extends Controller
 
     /**
      * @param string $actionId
+     *
      * @return array
      */
     public function options($actionId)
@@ -113,10 +110,12 @@ class SchedulerController extends Controller
         $tasks = $this->getScheduler()->getTasks();
 
         echo 'Running Tasks:'.PHP_EOL;
+
         $event = new SchedulerEvent([
             'tasks' => $tasks,
             'success' => true,
         ]);
+
         $this->trigger(SchedulerEvent::EVENT_BEFORE_RUN, $event);
         foreach ($tasks as $task) {
             $this->runTask($task);
@@ -126,6 +125,7 @@ class SchedulerController extends Controller
             }
         }
         $this->trigger(SchedulerEvent::EVENT_AFTER_RUN, $event);
+
         echo PHP_EOL;
     }
 
@@ -144,10 +144,12 @@ class SchedulerController extends Controller
         if (!$task) {
             throw new InvalidParamException('Invalid taskName');
         }
+
         $event = new SchedulerEvent([
             'tasks' => [$task],
             'success' => true,
         ]);
+
         $this->trigger(SchedulerEvent::EVENT_BEFORE_RUN, $event);
         $this->runTask($task);
         if ($task->exception) {

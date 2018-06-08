@@ -1,6 +1,4 @@
 <?php
-
-
 namespace thamtech\scheduler;
 
 use thamtech\scheduler\events\TaskEvent;

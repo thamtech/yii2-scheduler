@@ -1,10 +1,7 @@
 <?php
-
-
 namespace thamtech\scheduler\events;
 
 use yii\base\Event;
-
 
 class TaskEvent extends Event
 {

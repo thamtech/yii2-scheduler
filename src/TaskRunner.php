@@ -9,7 +9,6 @@ use thamtech\scheduler\models\SchedulerTask;
 /**
  * Class TaskRunner
  *
- * @package thamtech\scheduler
  * @property \thamtech\scheduler\Task $task
  */
 class TaskRunner extends \yii\base\Component
@@ -120,8 +119,11 @@ class TaskRunner extends \yii\base\Component
 
     /**
      * @param $code
+     *
      * @param $message
+     *
      * @param $file
+     *
      * @param $lineNumber
      */
     public function handleError($code, $message, $file, $lineNumber)

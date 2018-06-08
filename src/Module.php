@@ -24,6 +24,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
 
     /**
      * Bootstrap the console controllers.
+     *
      * @param \yii\base\Application $app
      */
     public function bootstrap($app)
