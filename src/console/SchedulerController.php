@@ -85,6 +85,7 @@ class SchedulerController extends Controller
     {
         // Update task index
         $this->getScheduler()->getTasks();
+
         $models = SchedulerTask::find()->all();
 
         echo $this->ansiFormat('Scheduled Tasks', Console::UNDERLINE).PHP_EOL;
@@ -161,7 +162,12 @@ class SchedulerController extends Controller
      */
     private function runTask(Task $task)
     {
-        echo sprintf("\tRunning %s...", $task->getName());
+        if (!$task->active) {
+            echo sprintf("\tSkipping inactive %s", $task->getDisplayName()).PHP_EOL;
+            return;
+        }
+
+        echo sprintf("\tRunning %s...", $task->getDisplayName());
         if ($task->shouldRun($this->force)) {
             $runner = new TaskRunner();
             $runner->setTask($task);
