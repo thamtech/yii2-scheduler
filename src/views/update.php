@@ -10,7 +10,6 @@ use yii\helpers\Html;
 use thamtech\scheduler\models\SchedulerTask;
 use yii\bootstrap\Tabs;
 use yii\bootstrap\ActiveForm;
-use thamtech\widgets\RadioButtonGroup;
 use yii\grid\GridView;
 
 
