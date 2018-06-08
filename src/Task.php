@@ -63,6 +63,14 @@ abstract class Task extends \yii\base\Component
      */
     private $_model;
 
+    /**
+     * @var string the task name
+     */
+    private $_name;
+
+    /**
+     * @inheritdoc
+     */
     public function init()
     {
         parent::init();
@@ -106,11 +114,21 @@ abstract class Task extends \yii\base\Component
     }
 
     /**
+     * Sets the task name.
+     *
+     * @param string $name the task name
+     */
+    public function setName($name)
+    {
+        $this->_name = $name;
+    }
+
+    /**
      * @return string
      */
     public function getName()
     {
-        return StringHelper::basename(get_class($this));
+        return $this->_name ?: get_class($this);
     }
 
     /**
@@ -172,7 +190,7 @@ abstract class Task extends \yii\base\Component
             $overdue = true;
         }
 
-        return ($model->active && ((!$isRunning && ($isDue || $forceRun)) || ($isRunning && $overdue)));
+        return ($this->active && ((!$isRunning && ($isDue || $forceRun)) || ($isRunning && $overdue)));
     }
 
 }

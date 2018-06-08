@@ -14,16 +14,9 @@ use yii\helpers\ArrayHelper;
 class Module extends \yii\base\Module implements BootstrapInterface
 {
     /**
-     * Path where task files can be found in the application structure.
-     * @var string
+     * @var Task[] explicitly configured tasks
      */
-    public $taskPath = '@app/tasks';
-
-    /**
-     * Namespace that tasks use.
-     * @var string
-     */
-    public $taskNameSpace = 'app\tasks';
+    private $_tasks = [];
 
     /**
      * Bootstrap the console controllers.
@@ -41,31 +34,41 @@ class Module extends \yii\base\Module implements BootstrapInterface
     }
 
     /**
-     * Scans the taskPath for any task files, if any are found it attempts to load them,
-     * creates a new instance of each class and appends it to an array, which it returns.
+     * Sets the tasks for a list of Task configuration arrays or Task objects.
+     *
+     * @param array $taskDefinitions array of Task configurations or Task objects
+     */
+    public function setTasks(array $taskDefinitions)
+    {
+        foreach ($taskDefinitions as $key=>$taskDefinition) {
+            if ($taskDefinition instanceof Task) {
+                $this->_tasks[$key] = $taskDefinition;
+                continue;
+            }
+
+            $task = Yii::createObject($taskDefinition);
+            if (!($task instanceof Task)) {
+                throw new InvalidConfigException('The task definition must define an instance of \thamtech\scheduler\Task.');
+            }
+
+            $this->_tasks[$key] = $task;
+        }
+    }
+
+    /**
+     * Gets Task instances.
      *
      * @return Task[]
+     *
      * @throws \yii\base\ErrorException
      */
     public function getTasks()
     {
-        $dir = Yii::getAlias($this->taskPath);
-
-        if (!is_readable($dir)) {
-            throw new \yii\base\ErrorException("Task directory ($dir) does not exist");
-        }
-
-        $files = array_diff(scandir($dir), array('..', '.'));
         $tasks = [];
 
-        foreach ($files as $fileName) {
-            // strip out the file extension to derive the class name
-            $className = preg_replace('/\.[^.]*$/', '', $fileName);
-
-            // validate class name
-            if (preg_match('/^[a-zA-Z0-9_]*Task$/', $className)) {
-                $tasks[] = $this->loadTask($className);
-            }
+        foreach ($this->_tasks as $key=>$task) {
+            $task->setModel(SchedulerTask::createTaskModel($task));
+            $tasks[$key] = $task;
         }
 
         $this->cleanTasks($tasks);
@@ -93,26 +96,23 @@ class Module extends \yii\base\Module implements BootstrapInterface
     }
 
     /**
-     * Given the className of a task, it will return a new instance of that task.
+     * Given the key of a task, it will return that task.
      * If the task doesn't exist, null will be returned.
      *
-     * @param $className
+     * @param $key
+     *
      * @return null|object
+     *
      * @throws \yii\base\InvalidConfigException
      */
-    public function loadTask($className)
+    public function loadTask($key)
     {
-        $className = implode('\\', [$this->taskNameSpace, $className]);
-
-        try {
-            $task = Yii::createObject($className);
-            $task->setModel(SchedulerTask::createTaskModel($task));
-        } catch (\ReflectionException $e) {
-            $task = null;
+        if (!isset($this->tasks[$key])) {
+            return null;
         }
 
+        $task = $this->tasks[$key];
+        $task->setModel(SchedulerTask::createTaskModel($task));
         return $task;
     }
-
-
 }

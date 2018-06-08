@@ -14,28 +14,28 @@ class ModuleTest extends TestCase
     {
         $module = Yii::createObject([
             'class' => '\thamtech\scheduler\Module',
-            'taskPath' => '@tests/tasks',
-            'taskNameSpace' => '\thamtech\scheduler\tests\tasks'
+            'tasks' => [
+                'AlphabetTask' => [
+                    'class' => 'thamtech\scheduler\tests\tasks\AlphabetTask',
+                    'name' => 'AlphabetTask',
+                ],
+                'NumberTask' => [
+                    'class' => 'thamtech\scheduler\tests\tasks\NumberTask',
+                    // name not set to test default getName() response
+                ],
+                'error-task' => [
+                    'class' => 'thamtech\scheduler\tests\tasks\ErrorTask',
+                    'name' => 'ErrorTask',
+                ],
+            ],
         ], ['scheduler']);
 
         $tasks = $module->getTasks();
 
         $this->assertEquals(3, count($tasks));
 
-        $this->assertEquals('AlphabetTask', $tasks[0]->getName());
-        $this->assertEquals('NumberTask', $tasks[2]->getName());
-        $this->assertEquals('ErrorTask', $tasks[1]->getName());
-    }
-
-    public function testGetTaskInvalidPath()
-    {
-        $this->setExpectedException('ErrorException');
-
-        $module = Yii::createObject([
-            'class' => '\thamtech\scheduler\Module',
-            'taskPath' => '@tests/some/random/path',
-        ], ['scheduler']);
-
-        $module->getTasks();
+        $this->assertEquals('AlphabetTask', $tasks['AlphabetTask']->getName());
+        $this->assertEquals('thamtech\scheduler\tests\tasks\NumberTask', $tasks['NumberTask']->getName());
+        $this->assertEquals('ErrorTask', $tasks['error-task']->getName());
     }
 }

@@ -37,9 +37,12 @@ using a different Yii project template) should be updated to reflect the changes
 below
 
 ```php
+<?php
     'bootstrap' => ['log', 'scheduler'],
     'modules' => [
-        'scheduler' => ['class' => 'thamtech\scheduler\Module'],
+        'scheduler' => [
+            'class' => 'thamtech\scheduler\Module',
+        ],
     ],
     'components' => [
         'errorHandler' => [
@@ -81,37 +84,23 @@ also add this to the top of your `config/console.php` file
 );
 ```
 
-To implement the GUI for scheduler also add the following to your
-`config/web.php` (or the equivalent web config file if you are
-using a different Yii project template)
-
-```php
-    'bootstrap' => ['log', 'scheduler'],
-    'modules' => [
-        'scheduler' => ['class' => 'thamtech\scheduler\Module'],
-    ],
-```
-
-After the configuration files have been updated, a `tasks` directory will need
-to be created in the root of your project.
-
 Run the database migrations, which will create the necessary tables for `scheduler`
 ```bash
 php yii migrate up --migrationPath=vendor/thamtech/yii2-scheduler/src/migrations
 ```
 
-Add a controller
+To implement the GUI for reviewing scheduled tasks and logs, add a web
+controller:
 
 ```php
 <?php
-
 namespace app\modules\admin\controllers;
 
 use yii\web\Controller;
 
 /**
- * Class SchedulerController
- * @package app\modules\admin\controllers
+ * SchedulerController has a set of actions for viewing scheduled tasks and
+ * their logs.
  */
 class SchedulerController extends Controller
 {
@@ -137,38 +126,89 @@ class SchedulerController extends Controller
 
 ## Example Task
 
-You can now create your first task using scheduler, create the file
-`AlphabetTask.php` inside the `tasks` directory in your project root.
-
-Paste the below code into your task:
+You can now create your first task using scheduler. In this example, we will
+create `ConcatStringsTask.php` inside the `tasks` directory of your app:
 
 ```php
 <?php
 namespace app\tasks;
 
 /**
- * Class AlphabetTask
- * @package app\tasks
+ * Task to print a concatenation of the specified strings.
  */
-class AlphabetTask extends \thamtech\scheduler\Task
+class ConcatStringsTask extends \thamtech\scheduler\Task
 {
-    public $description = 'Prints the alphabet';
-    public $schedule = '0 * * * *';
+    /**
+     * @var string task description
+     */
+    public $description = 'Prints a concatenation of the specified strings';
+    
+    /**
+     * @var string[] the strings to be concatenated
+     */
+    public $strings = [];
+    
+    /**
+     * @inheritdoc
+     */
     public function run()
     {
-        foreach (range('A', 'Z') as $letter) {
-            echo $letter;
-        }
+        echo join('', $this->strings);
     }
 }
 ```
 
+In your `scheduler` module config within your console app, define the task:
+
+```php
+<?php
+'modules' => [
+    'scheduler' => [
+        'class' => 'thamtech\scheduler\Module',
+        'tasks' => [
+            'hello-world' => [
+                'class' => 'app\tasks\ConcatStringsTask',
+                'name' => 'Hello World Task',
+                'schedule' => '0 * * * *',
+                'strings' => ['Hello', ' ', 'World'],
+            ],
+        ],
+    ],
+],
+```
+
 The above code defines a simple task that runs at the start of every hour, and
-prints the alphabet.
+prints "Hello World".
 
 The `$schedule` property of this class defines how often the task will run,
 these are simply [Cron Expression](http://en.wikipedia.org/wiki/Cron#Examples)
 
+You can define multiple task instances in the `scheduler` module config, and it
+is ok to reuse the same Task class for multiple instances. Here is an example
+with an additional "Foo Bar" task that runs every hour on the half-hour:
+
+```php
+<?php
+'modules' => [
+    'scheduler' => [
+        'class' => 'thamtech\scheduler\Module',
+        'tasks' => [
+            'hello-world' => [
+                'class' => 'app\tasks\ConcatStringsTask',
+                'name' => 'Hello World Task',
+                'schedule' => '0 * * * *',
+                'strings' => ['Hello', ' ', 'World'],
+            ],
+            'foo-bar' => [
+                'class' => 'app\tasks\ConcatStringsTask',
+                'name' => 'Foo Bar Task',
+                'schedule' => '30 * * * *',
+                'strings' => ['Foo', ' ', 'Bar'],
+            ],
+        ],
+    ],
+],
+```
 
 ### Running the tasks
 
@@ -179,10 +219,10 @@ Scheduler provides an intuitive CLI for executing tasks, below are some examples
  $ php yii scheduler
 
  # run the task if due
- $ php yii scheduler/run --taskName=AlphabetTask
+ $ php yii scheduler/run --taskName=hello-world
 
  # force the task to run regardless of schedule
- $ php yii scheduler/run --taskName=AlphabetTask --force
+ $ php yii scheduler/run --taskName=hello-world --force
 
  # run all tasks
  $ php yii scheduler/run-all
@@ -205,6 +245,7 @@ level for multiple tasks
 Task Level
 
 ```php
+<?php
 Event::on(AlphabetTask::className(), AlphabetTask::EVENT_BEFORE_RUN, function ($event) {
     Yii::trace($event->task->className . ' is about to run');
 });
@@ -216,6 +257,7 @@ Event::on(AlphabetTask::className(), AlphabetTask::EVENT_AFTER_RUN, function ($e
 or at the global level, to throw errors in `/yii`
 
 ```php
+<?php
 $application->on(\thamtech\scheduler\events\SchedulerEvent::EVENT_AFTER_RUN, function ($event) {
     if (!$event->success) {
         foreach($event->exceptions as $exception) {
