@@ -21,7 +21,7 @@
     }
   ],
   "require": {
-    "yiisoft/yii2": "^2.0.9",
+    "yiisoft/yii2": "^2.0.14 <2.1",
     "mtdowling/cron-expression": "~1.0",
     "webtoolsnz/yii2-widgets": "*"
   },
