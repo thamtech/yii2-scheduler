@@ -36,7 +36,7 @@ class TaskTest extends TestCase
     public function testGetName()
     {
         $task = new AlphabetTask();
-        $this->assertEquals('thamtech\scheduler\tests\tasks\AlphabetTask', $task->getName());
+        $this->assertEquals('thamtech\scheduler\tests\tasks\AlphabetTask', $task->getDisplayName());
     }
 
     /**

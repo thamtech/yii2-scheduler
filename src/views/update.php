@@ -30,6 +30,7 @@ $this->params['breadcrumbs'][] = $model->__toString();
     ]); ?>
 
     <?= $form->field($model, 'name', ['inputOptions' => ['disabled' => 'disabled']]) ?>
+    <?= $form->field($model, 'display_name', ['inputOptions' => ['disabled' => 'disabled']]) ?>
     <?= $form->field($model, 'description', ['inputOptions' => ['disabled' => 'disabled']]) ?>
     <?= $form->field($model, 'schedule', ['inputOptions' => ['disabled' => 'disabled']]) ?>
     <?= $form->field($model, 'status', ['inputOptions' => ['disabled' => 'disabled']]) ?>
@@ -40,13 +41,6 @@ $this->params['breadcrumbs'][] = $model->__toString();
 
     <?= $form->field($model, 'last_run', ['inputOptions' => ['disabled' => 'disabled']]) ?>
     <?= $form->field($model, 'next_run', ['inputOptions' => ['disabled' => 'disabled']]) ?>
-
-    <?= $form->field($model, 'active')->widget(RadioButtonGroup::className(), [
-        'items' => [1 => 'Yes', 0 => 'No'],
-        'itemOptions' => [
-            'buttons' => [0 => ['activeState' => 'btn active btn-danger']]
-        ]
-    ]); ?>
 
     <?= Html::submitButton('<span class="glyphicon glyphicon-check"></span> ' . ($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Save')), [
         'id' => 'save-' . $model->formName(),

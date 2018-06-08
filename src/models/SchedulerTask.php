@@ -17,6 +17,8 @@ class SchedulerTask extends \thamtech\scheduler\models\base\SchedulerTask
     const STATUS_OVERDUE = 40;
     const STATUS_ERROR = 50;
 
+    public $active = true;
+
     /**
      * @var array
      */
@@ -31,6 +33,7 @@ class SchedulerTask extends \thamtech\scheduler\models\base\SchedulerTask
 
     /**
      * Return Taskname
+     *
      * @return string
      */
     public function __toString()
@@ -39,22 +42,27 @@ class SchedulerTask extends \thamtech\scheduler\models\base\SchedulerTask
     }
 
     /**
-     * @param $task
+     *
+     * @param string $name
+     *
+     * @param Task $task
+     *
      * @return array|null|SchedulerTask|\yii\db\ActiveRecord
      */
-    public static function createTaskModel($task)
+    public static function createTaskModel($name, $task)
     {
         $model = SchedulerTask::find()
-            ->where(['name' => $task->getName()])
+            ->where(['name' => $name])
             ->one();
 
         if (!$model) {
             $model = new SchedulerTask();
-            $model->name = $task->getName();
-            $model->active = $task->active;
+            $model->name = $name;
+            $model->display_name = $task->displayName;
             $model->next_run = $task->getNextRunDate();
             $model->last_run = NULL;
             $model->status_id = self::STATUS_PENDING;
+            $model->active = $task->active;
         }
 
         $model->description = $task->description;

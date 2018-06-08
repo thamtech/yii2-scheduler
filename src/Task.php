@@ -23,38 +23,31 @@ abstract class Task extends \yii\base\Component
     public $databaseLock = true;
 
     /**
-     * Exception raised during run (if any)
-     *
-     * @var \Exception|null
+     * @var \Exception|null Exception raised during run (if any)
      */
     public $exception;
 
     /**
-     * Brief description of the task.
-     *
-     * @var String
+     * @var String Task description
      */
     public $description;
 
     /**
-     * The cron expression that determines how often this task should run.
-     *
-     * @var String
+     * @var String The cron expression that determines how often this task
+     *     should run.
      */
     public $schedule;
 
     /**
-     * Active flag allows you to set the task to inactive (meaning it will not run)
-     *
-     * @var bool
+     * @var bool Active flag allows you to set the task to inactive (meaning it
+     *     will not run)
      */
     public $active = true;
 
     /**
-     * How many seconds after due date to wait until the task becomes overdue and is re-run.
-     * This should be set to at least 2x the amount of time the task takes to run as the task will be restarted.
-     *
-     * @var int
+     * @var int How many seconds after due date to wait until the task becomes
+     *     overdue and is re-run. This should be set to at least 2x the amount
+     *     of time the task takes to run as the task will be restarted.
      */
     public $overdueThreshold = 3600;
 
@@ -66,7 +59,7 @@ abstract class Task extends \yii\base\Component
     /**
      * @var string the task name
      */
-    private $_name;
+    private $_displayName;
 
     /**
      * @inheritdoc
@@ -104,6 +97,7 @@ abstract class Task extends \yii\base\Component
 
     /**
      * @param string|\DateTime $currentTime
+     *
      * @return string
      */
     public function getNextRunDate($currentTime = 'now')
@@ -114,21 +108,21 @@ abstract class Task extends \yii\base\Component
     }
 
     /**
-     * Sets the task name.
+     * Sets the task display name.
      *
      * @param string $name the task name
      */
-    public function setName($name)
+    public function setDisplayName($name)
     {
-        $this->_name = $name;
+        $this->_displayName = $name;
     }
 
     /**
      * @return string
      */
-    public function getName()
+    public function getDisplayName()
     {
-        return $this->_name ?: get_class($this);
+        return $this->_displayName ?: get_class($this);
     }
 
     /**
@@ -178,6 +172,7 @@ abstract class Task extends \yii\base\Component
 
     /**
      * @param bool $forceRun
+     *
      * @return bool
      */
     public function shouldRun($forceRun = false)
@@ -186,6 +181,7 @@ abstract class Task extends \yii\base\Component
         $isDue = in_array($model->status_id, [SchedulerTask::STATUS_DUE, SchedulerTask::STATUS_OVERDUE, SchedulerTask::STATUS_ERROR]);
         $isRunning = $model->status_id == SchedulerTask::STATUS_RUNNING;
         $overdue = false;
+
         if((strtotime($model->started_at) + $this->overdueThreshold) <= strtotime("now")) {
             $overdue = true;
         }

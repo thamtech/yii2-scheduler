@@ -68,12 +68,8 @@ class Module extends \yii\base\Module implements BootstrapInterface
     {
         $this->ensureTaskInstances();
 
-        $currentTasks = ArrayHelper::map($this->_taskInstances, function ($task) {
-            return $task->getName();
-        }, 'description');
-
         foreach (SchedulerTask::find()->indexBy('name')->all() as $name => $task) { /* @var SchedulerTask $task */
-            if (!array_key_exists($name, $currentTasks)) {
+            if (!array_key_exists($name, $this->_taskInstances)) {
                 SchedulerLog::deleteAll(['scheduler_task_id' => $task->id]);
                 $task->delete();
             }
@@ -84,16 +80,16 @@ class Module extends \yii\base\Module implements BootstrapInterface
      * Given the key of a task, it will return that task.
      * If the task doesn't exist, null will be returned.
      *
-     * @param $key
+     * @param $name
      *
      * @return null|object
      *
      * @throws \yii\base\InvalidConfigException
      */
-    public function loadTask($key)
+    public function loadTask($name)
     {
         $tasks = $this->tasks;
-        return isset($tasks[$key]) ? $tasks[$key] : null;
+        return isset($tasks[$name]) ? $tasks[$name] : null;
     }
 
     /**
@@ -103,13 +99,13 @@ class Module extends \yii\base\Module implements BootstrapInterface
     {
         // remove instances that are no longer in
         $staleInstanceKeys = array_keys(array_diff_key($this->_taskInstances, $this->_taskDefinitions));
-        foreach ($staleInstanceKeys as $key) {
-            unset($this->_taskInstances[$key]);
+        foreach ($staleInstanceKeys as $name) {
+            unset($this->_taskInstances[$name]);
         }
 
         // establish task instances that are defined but not yet instantiated
         $taskDefinitions = array_diff_key($this->_taskDefinitions, $this->_taskInstances);
-        foreach ($taskDefinitions as $key=>$task) {
+        foreach ($taskDefinitions as $name=>$task) {
             if (!($task instanceof Task)) {
                 $task = Yii::createObject($task);
             }
@@ -118,8 +114,8 @@ class Module extends \yii\base\Module implements BootstrapInterface
                 throw new InvalidConfigException('The task definition must define an instance of \thamtech\scheduler\Task.');
             }
 
-            $task->setModel(SchedulerTask::createTaskModel($task));
-            $this->_taskInstances[$key] = $task;
+            $task->setModel(SchedulerTask::createTaskModel($name, $task));
+            $this->_taskInstances[$name] = $task;
         }
     }
 }

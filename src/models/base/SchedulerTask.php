@@ -10,6 +10,7 @@ use yii\data\ActiveDataProvider;
  *
  * @property integer $id
  * @property string $name
+ * @property string $display_name
  * @property string $schedule
  * @property string $description
  * @property integer $status_id
@@ -52,11 +53,11 @@ class SchedulerTask extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'schedule', 'description', 'status_id'], 'required'],
-            [['description'], 'string'],
-            [['status_id', 'active'], 'integer'],
+            [['name', 'display_name', 'schedule', 'description', 'status_id'], 'required'],
+            [['description', 'display_name'], 'string'],
+            [['status_id'], 'integer'],
             [['started_at', 'last_run', 'next_run'], 'safe'],
-            [['name', 'schedule'], 'string', 'max' => 45],
+            [['name', 'schedule'], 'string', 'max' => 255],
             [['name'], 'unique']
         ];
     }
@@ -69,13 +70,13 @@ class SchedulerTask extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'name' => Yii::t('app', 'Name'),
+            'display_name' => Yii::t('app', 'Display Name'),
             'schedule' => Yii::t('app', 'Schedule'),
             'description' => Yii::t('app', 'Description'),
             'status_id' => Yii::t('app', 'Status ID'),
             'started_at' => Yii::t('app', 'Started At'),
             'last_run' => Yii::t('app', 'Last Run'),
             'next_run' => Yii::t('app', 'Next Run'),
-            'active' => Yii::t('app', 'Active'),
         ];
     }
 
@@ -110,10 +111,11 @@ class SchedulerTask extends \yii\db\ActiveRecord
         $query->andFilterWhere([
             'id' => $this->id,
             'status_id' => $this->status_id,
-            'active' => $this->active,
         ]);
 
-        $query->andFilterWhere(['like', 'name', $this->name])
+        $query
+            ->andFilterWhere(['like', 'name', $this->name])
+            ->andFilterWhere(['like', 'display_name', $this->display_name])
             ->andFilterWhere(['like', 'schedule', $this->schedule])
             ->andFilterWhere(['like', 'description', $this->description])
             ->andFilterWhere(['like', 'started_at', $this->started_at])

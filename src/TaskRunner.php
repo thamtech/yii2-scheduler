@@ -16,15 +16,12 @@ class TaskRunner extends \yii\base\Component
 {
 
     /**
-     * Indicates whether an error occured during the executing of the task.
-     * @var bool
+     * @var bool Indicates whether an error occured during the executing of the task.
      */
     public $error;
 
     /**
-     * The task that will be executed.
-     *
-     * @var \thamtech\scheduler\Task
+     * @var \thamtech\scheduler\Task The task that will be executed.
      */
     private $_task;
 

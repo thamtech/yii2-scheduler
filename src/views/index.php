@@ -38,7 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
                 ],
 
-                'name',
+                'display_name',
                 'description',
                 'schedule',
                 'status'

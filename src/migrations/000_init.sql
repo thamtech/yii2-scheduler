@@ -7,13 +7,13 @@ DROP TABLE IF EXISTS `scheduler_task` ;
 CREATE TABLE IF NOT EXISTS `scheduler_task` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `dislpay_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `schedule` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `description` text COLLATE utf8_unicode_ci NOT NULL,
   `status_id` int(11) unsigned NOT NULL,
   `started_at` timestamp NULL DEFAULT NULL,
   `last_run` timestamp NULL DEFAULT NULL,
   `next_run` timestamp NULL DEFAULT NULL,
-  `active` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_name` (`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;

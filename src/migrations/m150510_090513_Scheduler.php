@@ -25,13 +25,13 @@ class m150510_090513_Scheduler extends Migration
         $this->createTable(self::TABLE_SCHEDULER_TASK, [
             'id' => $this->primaryKey()->unsigned(),
             'name' => $this->string()->notNull(),
+            'display_name' => $this->string()->notNull(),
             'schedule' => $this->string()->notNull(),
             'description' => $this->text()->notNull(),
             'status_id' => $this->integer()->unsigned()->notNull(),
             'started_at' => $this->timestamp()->null()->defaultValue(null),
             'last_run' => $this->timestamp()->null()->defaultValue(null),
             'next_run' => $this->timestamp()->null()->defaultValue(null),
-            'active' => $this->boolean()->notNull()->defaultValue(false),
         ], $tableOptions);
 
         $this->createIndex('idx_name', self::TABLE_SCHEDULER_TASK, 'name', true);

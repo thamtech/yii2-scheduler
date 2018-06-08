@@ -168,7 +168,7 @@ In your `scheduler` module config within your console app, define the task:
         'tasks' => [
             'hello-world' => [
                 'class' => 'app\tasks\ConcatStringsTask',
-                'name' => 'Hello World Task',
+                'displayName' => 'Hello World Task',
                 'schedule' => '0 * * * *',
                 'strings' => ['Hello', ' ', 'World'],
             ],
@@ -195,13 +195,13 @@ with an additional "Foo Bar" task that runs every hour on the half-hour:
         'tasks' => [
             'hello-world' => [
                 'class' => 'app\tasks\ConcatStringsTask',
-                'name' => 'Hello World Task',
+                'displayName' => 'Hello World Task',
                 'schedule' => '0 * * * *',
                 'strings' => ['Hello', ' ', 'World'],
             ],
             'foo-bar' => [
                 'class' => 'app\tasks\ConcatStringsTask',
-                'name' => 'Foo Bar Task',
+                'displayName' => 'Foo Bar Task',
                 'schedule' => '30 * * * *',
                 'strings' => ['Foo', ' ', 'Bar'],
             ],

@@ -17,15 +17,15 @@ class ModuleTest extends TestCase
             'tasks' => [
                 'AlphabetTask' => [
                     'class' => 'thamtech\scheduler\tests\tasks\AlphabetTask',
-                    'name' => 'AlphabetTask',
+                    'displayName' => 'AlphabetTask',
                 ],
                 'NumberTask' => [
                     'class' => 'thamtech\scheduler\tests\tasks\NumberTask',
-                    // name not set to test default getName() response
+                    // displayName not set to test default getName() response
                 ],
                 'error-task' => [
                     'class' => 'thamtech\scheduler\tests\tasks\ErrorTask',
-                    'name' => 'ErrorTask',
+                    'displayName' => 'ErrorTask',
                 ],
             ],
         ], ['scheduler']);
@@ -34,8 +34,8 @@ class ModuleTest extends TestCase
 
         $this->assertEquals(3, count($tasks));
 
-        $this->assertEquals('AlphabetTask', $tasks['AlphabetTask']->getName());
-        $this->assertEquals('thamtech\scheduler\tests\tasks\NumberTask', $tasks['NumberTask']->getName());
-        $this->assertEquals('ErrorTask', $tasks['error-task']->getName());
+        $this->assertEquals('AlphabetTask', $tasks['AlphabetTask']->getDisplayName());
+        $this->assertEquals('thamtech\scheduler\tests\tasks\NumberTask', $tasks['NumberTask']->getDisplayName());
+        $this->assertEquals('ErrorTask', $tasks['error-task']->getDisplayName());
     }
 }
