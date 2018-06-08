@@ -2,21 +2,25 @@
 namespace thamtech\scheduler;
 
 use thamtech\scheduler\models\SchedulerLog;
-use Yii;
-use yii\base\BootstrapInterface;
 use thamtech\scheduler\models\SchedulerTask;
+use yii\base\BootstrapInterface;
 use yii\helpers\ArrayHelper;
+use Yii;
 
 /**
- * Class Module
- * @package thamtech\scheduler
+ * This is the main Yii2 Scheduler module class.
  */
 class Module extends \yii\base\Module implements BootstrapInterface
 {
     /**
-     * @var Task[] explicitly configured tasks
+     * @var array task definitions
      */
-    private $_tasks = [];
+    private $_taskDefinitions = [];
+
+    /**
+     * @var Task[] array of instantiate tasks
+     */
+    private $_taskInstances = [];
 
     /**
      * Bootstrap the console controllers.
@@ -40,19 +44,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
      */
     public function setTasks(array $taskDefinitions)
     {
-        foreach ($taskDefinitions as $key=>$taskDefinition) {
-            if ($taskDefinition instanceof Task) {
-                $this->_tasks[$key] = $taskDefinition;
-                continue;
-            }
-
-            $task = Yii::createObject($taskDefinition);
-            if (!($task instanceof Task)) {
-                throw new InvalidConfigException('The task definition must define an instance of \thamtech\scheduler\Task.');
-            }
-
-            $this->_tasks[$key] = $task;
-        }
+        $this->_taskDefinitions = ArrayHelper::merge($this->_taskDefinitions, $taskDefinitions);
     }
 
     /**
@@ -64,26 +56,19 @@ class Module extends \yii\base\Module implements BootstrapInterface
      */
     public function getTasks()
     {
-        $tasks = [];
-
-        foreach ($this->_tasks as $key=>$task) {
-            $task->setModel(SchedulerTask::createTaskModel($task));
-            $tasks[$key] = $task;
-        }
-
-        $this->cleanTasks($tasks);
-
-        return $tasks;
+        $this->ensureTaskInstances();
+        $this->cleanTasks();
+        return $this->_taskInstances;
     }
 
     /**
      * Removes any records of tasks that no longer exist.
-     *
-     * @param Task[] $tasks
      */
-    public function cleanTasks($tasks)
+    public function cleanTasks()
     {
-        $currentTasks = ArrayHelper::map($tasks, function ($task) {
+        $this->ensureTaskInstances();
+
+        $currentTasks = ArrayHelper::map($this->_taskInstances, function ($task) {
             return $task->getName();
         }, 'description');
 
@@ -107,12 +92,34 @@ class Module extends \yii\base\Module implements BootstrapInterface
      */
     public function loadTask($key)
     {
-        if (!isset($this->tasks[$key])) {
-            return null;
+        $tasks = $this->tasks;
+        return isset($tasks[$key]) ? $tasks[$key] : null;
+    }
+
+    /**
+     * Makes sure that the defined tasks have been instantiated
+     */
+    private function ensureTaskInstances()
+    {
+        // remove instances that are no longer in
+        $staleInstanceKeys = array_keys(array_diff_key($this->_taskInstances, $this->_taskDefinitions));
+        foreach ($staleInstanceKeys as $key) {
+            unset($this->_taskInstances[$key]);
         }
 
-        $task = $this->tasks[$key];
-        $task->setModel(SchedulerTask::createTaskModel($task));
-        return $task;
+        // establish task instances that are defined but not yet instantiated
+        $taskDefinitions = array_diff_key($this->_taskDefinitions, $this->_taskInstances);
+        foreach ($taskDefinitions as $key=>$task) {
+            if (!($task instanceof Task)) {
+                $task = Yii::createObject($task);
+            }
+
+            if (!($task instanceof Task)) {
+                throw new InvalidConfigException('The task definition must define an instance of \thamtech\scheduler\Task.');
+            }
+
+            $task->setModel(SchedulerTask::createTaskModel($task));
+            $this->_taskInstances[$key] = $task;
+        }
     }
 }
