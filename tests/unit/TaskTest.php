@@ -32,32 +32,32 @@ class TaskTest extends TestCase
 //        $this->assertEquals($start, $model->last_run);
 //        $this->assertEquals($nextRun, $model->next_run);
 //    }
-//
-//    public function testGetName()
-//    {
-//        $task = new AlphabetTask();
-//        $this->assertEquals('AlphabetTask', $task->getName());
-//    }
-//
-//    /**
-//     * @dataProvider runDateProvider
-//     */
-//    public function testGetNextRunDate($expression, $currentTime, $nextRun)
-//    {
-//        $task = new AlphabetTask();
-//        $task->schedule = $expression;
-//
-//        $this->assertEquals($nextRun, $task->getNextRunDate($currentTime));
-//    }
-//
-//    public function runDateProvider()
-//    {
-//        return [
-//            ['*/5 * * * *', new \DateTime('1987-11-15 05:25:00'), '1987-11-15 05:30:00'],
-//            ['0 */1 * * *', new \DateTime('2015-05-03 16:45:46'), '2015-05-03 17:00:00'],
-//            ['0 0 * * *', new \DateTime('2015-05-03 16:45:46'), '2015-05-04 00:00:00']
-//        ];
-//    }
+
+    public function testGetName()
+    {
+        $task = new AlphabetTask();
+        $this->assertEquals('thamtech\scheduler\tests\tasks\AlphabetTask', $task->getName());
+    }
+
+    /**
+     * @dataProvider runDateProvider
+     */
+    public function testGetNextRunDate($expression, $currentTime, $nextRun)
+    {
+        $task = new AlphabetTask();
+        $task->schedule = $expression;
+
+        $this->assertEquals($nextRun, $task->getNextRunDate($currentTime));
+    }
+
+    public function runDateProvider()
+    {
+        return [
+            ['*/5 * * * *', new \DateTime('1987-11-15 05:25:00'), '1987-11-15 05:30:00'],
+            ['0 */1 * * *', new \DateTime('2015-05-03 16:45:46'), '2015-05-03 17:00:00'],
+            ['0 0 * * *', new \DateTime('2015-05-03 16:45:46'), '2015-05-04 00:00:00']
+        ];
+    }
 //
 //    /**
 //     * @dataProvider shouldRunProvider
@@ -90,26 +90,26 @@ class TaskTest extends TestCase
 //        ];
 //    }
 //
-//    public function testWriteLine()
-//    {
-//        $task = new AlphabetTask();
-//
-//        ob_start();
-//        $task->writeLine('test');
-//        $output = ob_get_contents();
-//        ob_end_clean();
-//
-//        $this->assertEquals("test\n", $output);
-//    }
-//
-//    public function testGetSetModel()
-//    {
-//        $task = new AlphabetTask();
-//        $model = new \stdClass();
-//
-//        $task->setModel($model);
-//        $this->assertEquals($model, $task->getModel());
-//    }
+    public function testWriteLine()
+    {
+        $task = new AlphabetTask();
+
+        ob_start();
+        $task->writeLine('test');
+        $output = ob_get_contents();
+        ob_end_clean();
+
+        $this->assertEquals("test\n", $output);
+    }
+
+    public function testGetSetModel()
+    {
+        $task = new AlphabetTask();
+        $model = new \stdClass();
+
+        $task->setModel($model);
+        $this->assertEquals($model, $task->getModel());
+    }
 
 
 }
