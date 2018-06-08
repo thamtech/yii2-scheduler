@@ -11,9 +11,9 @@ CREATE TABLE IF NOT EXISTS `scheduler_task` (
   `schedule` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `description` text COLLATE utf8_unicode_ci NOT NULL,
   `status_id` int(11) unsigned NOT NULL,
-  `started_at` timestamp NULL DEFAULT NULL,
-  `last_run` timestamp NULL DEFAULT NULL,
-  `next_run` timestamp NULL DEFAULT NULL,
+  `started_at` datetime NULL DEFAULT NULL,
+  `last_run` datetime NULL DEFAULT NULL,
+  `next_run` datetime NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_name` (`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -25,8 +25,8 @@ CREATE TABLE IF NOT EXISTS `scheduler_task` (
 CREATE TABLE IF NOT EXISTS `scheduler_log` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `scheduler_task_id` int(11) unsigned NOT NULL,
-  `started_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `ended_at` timestamp NULL DEFAULT NULL,
+  `started_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `ended_at` datetime NULL DEFAULT NULL,
   `output` text COLLATE utf8_unicode_ci NOT NULL,
   `error` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`),

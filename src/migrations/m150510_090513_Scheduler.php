@@ -29,9 +29,9 @@ class m150510_090513_Scheduler extends Migration
             'schedule' => $this->string()->notNull(),
             'description' => $this->text()->notNull(),
             'status_id' => $this->integer()->unsigned()->notNull(),
-            'started_at' => $this->timestamp()->null()->defaultValue(null),
-            'last_run' => $this->timestamp()->null()->defaultValue(null),
-            'next_run' => $this->timestamp()->null()->defaultValue(null),
+            'started_at' => $this->dateTime()->null()->defaultValue(null),
+            'last_run' => $this->dateTime()->null()->defaultValue(null),
+            'next_run' => $this->dateTime()->null()->defaultValue(null),
         ], $tableOptions);
 
         $this->createIndex('idx_name', self::TABLE_SCHEDULER_TASK, 'name', true);
@@ -39,8 +39,8 @@ class m150510_090513_Scheduler extends Migration
         $this->createTable(self::TABLE_SCHEDULER_LOG, [
             'id' => $this->bigPrimaryKey()->unsigned(),
             'scheduler_task_id' => $this->integer()->unsigned()->notNull(),
-            'started_at' => $this->timestamp()->notNull()->defaultExpression('CURRENT_TIMESTAMP'),
-            'ended_at' => $this->timestamp()->defaultValue(null),
+            'started_at' => $this->dateTime()->notNull()->defaultExpression('CURRENT_TIMESTAMP'),
+            'ended_at' => $this->dateTime()->defaultValue(null),
             'output' => $this->text()->notNull(),
             'error' => $this->boolean()->defaultValue(false),
         ], $tableOptions);
