@@ -34,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'attribute' => 'name',
                     'format' => 'raw',
                     'value' => function ($t) {
-                        return Html::a($t->name, ['update', 'id' => $t->id]);
+                        return Html::a($t->name, ['view', 'id' => $t->id]);
                     }
                 ],
 

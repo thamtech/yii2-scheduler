@@ -111,9 +111,9 @@ class SchedulerController extends Controller
                 'class' => 'thamtech\scheduler\actions\IndexAction',
                 'view' => '@scheduler/views/index',
             ],
-            'update' => [
-                'class' => 'thamtech\scheduler\actions\UpdateAction',
-                'view' => '@scheduler/views/update',
+            'view' => [
+                'class' => 'thamtech\scheduler\actions\ViewAction',
+                'view' => '@scheduler/views/view',
             ],
             'view-log' => [
                 'class' => 'thamtech\scheduler\actions\ViewLogAction',

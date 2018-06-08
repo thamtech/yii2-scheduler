@@ -6,8 +6,7 @@ use yii\base\Action;
 use thamtech\scheduler\models\SchedulerLog;
 
 /**
- * Class UpdateAction
- * @package thamtech\scheduler\actions
+ * View a log entry.
  */
 class ViewLogAction extends Action
 {

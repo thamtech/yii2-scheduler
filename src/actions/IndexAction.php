@@ -6,8 +6,7 @@ use yii\base\Action;
 use thamtech\scheduler\models\SchedulerTask;
 
 /**
- * Class IndexAction
- * @package thamtech\scheduler\actions
+ * List the task instances that have been established in the database.
  */
 class IndexAction extends Action
 {

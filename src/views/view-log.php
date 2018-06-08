@@ -1,6 +1,6 @@
 <?php
 /**
- * Update Task View
+ * Log Entry view
  *
  * @var yii\web\View $this
  * @var thamtech\scheduler\models\SchedulerLog $model
@@ -12,7 +12,7 @@ use thamtech\scheduler\models\SchedulerTask;
 
 $this->title = $model->__toString();
 $this->params['breadcrumbs'][] = ['label' => SchedulerTask::label(2), 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->schedulerTask->__toString(), 'url' => ['update', 'id' => $model->scheduler_task_id]];
+$this->params['breadcrumbs'][] = ['label' => $model->schedulerTask->__toString(), 'url' => ['view', 'id' => $model->scheduler_task_id]];
 $this->params['breadcrumbs'][] = $model->__toString();
 ?>
 

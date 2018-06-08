@@ -7,10 +7,9 @@ use yii\base\Action;
 use thamtech\scheduler\models\SchedulerTask;
 
 /**
- * Class UpdateAction
- * @package thamtech\scheduler\actions
+ * View a task instance.
  */
-class UpdateAction extends Action
+class ViewAction extends Action
 {
     /**
      * @var string the view file to be rendered. If not set, it will take the value of [[id]].

@@ -1,6 +1,6 @@
 <?php
 /**
- * Update Task View
+ * Task View
  *
  * @var yii\web\View $this
  * @var thamtech\scheduler\models\SchedulerTask $model
@@ -9,44 +9,37 @@
 use yii\helpers\Html;
 use thamtech\scheduler\models\SchedulerTask;
 use yii\bootstrap\Tabs;
-use yii\bootstrap\ActiveForm;
 use yii\grid\GridView;
+use yii\widgets\DetailView;
 
 
 $this->title = $model->__toString();
 $this->params['breadcrumbs'][] = ['label' => SchedulerTask::label(2), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $model->__toString();
 ?>
-<div class="task-update">
+<div class="task-view">
 
     <h1><?=$this->title ?></h1>
 
     <?php $this->beginBlock('main'); ?>
-    <?php $form = ActiveForm::begin([
-        'id' => $model->formName(),
-        'layout' => 'horizontal',
-        'enableClientValidation' => false,
-    ]); ?>
-
-    <?= $form->field($model, 'name', ['inputOptions' => ['disabled' => 'disabled']]) ?>
-    <?= $form->field($model, 'display_name', ['inputOptions' => ['disabled' => 'disabled']]) ?>
-    <?= $form->field($model, 'description', ['inputOptions' => ['disabled' => 'disabled']]) ?>
-    <?= $form->field($model, 'schedule', ['inputOptions' => ['disabled' => 'disabled']]) ?>
-    <?= $form->field($model, 'status', ['inputOptions' => ['disabled' => 'disabled']]) ?>
-
-    <?php if ($model->status_id == SchedulerTask::STATUS_RUNNING): ?>
-        <?= $form->field($model, 'started_at', ['inputOptions' => ['disabled' => 'disabled']]) ?>
-    <?php endif ?>
-
-    <?= $form->field($model, 'last_run', ['inputOptions' => ['disabled' => 'disabled']]) ?>
-    <?= $form->field($model, 'next_run', ['inputOptions' => ['disabled' => 'disabled']]) ?>
-
-    <?= Html::submitButton('<span class="glyphicon glyphicon-check"></span> ' . ($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Save')), [
-        'id' => 'save-' . $model->formName(),
-        'class' => 'btn btn-primary'
-    ]); ?>
-
-    <?php ActiveForm::end(); ?>
+    <?= DetailView::widget([
+        'model' => $model,
+        'attributes' => [
+            'id',
+            'name',
+            'display_name',
+            'description',
+            'schedule',
+            'status',
+            [
+                'attribute' => 'started_at',
+                'format' => 'raw',
+                'value' => $model->status_id == SchedulerTask::STATUS_RUNNING ? $model->started_at : '',
+            ],
+            'last_run',
+            'next_run',
+        ],
+    ]) ?>
     <?php $this->endBlock(); ?>
 
 
