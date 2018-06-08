@@ -55,7 +55,7 @@ class SchedulerController extends Controller
      */
     public function options($actionId)
     {
-        $options = [];
+        $options = parent::options($actionId);
 
         switch ($actionId) {
             case 'run-all':
