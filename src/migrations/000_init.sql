@@ -5,37 +5,35 @@ DROP TABLE IF EXISTS `scheduler_task` ;
 -- Table `scheduler_task`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `scheduler_task` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(45) NOT NULL,
-  `schedule` VARCHAR(45) NOT NULL,
-  `description` TEXT NOT NULL,
-  `status_id` INT NOT NULL,
-  `started_at` TIMESTAMP NULL DEFAULT NULL,
-  `last_run` TIMESTAMP NULL DEFAULT NULL,
-  `next_run` TIMESTAMP NULL DEFAULT NULL,
-  `active` TINYINT(1) NOT NULL DEFAULT 0,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `schedule` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `description` text COLLATE utf8_unicode_ci NOT NULL,
+  `status_id` int(11) unsigned NOT NULL,
+  `started_at` timestamp NULL DEFAULT NULL,
+  `last_run` timestamp NULL DEFAULT NULL,
+  `next_run` timestamp NULL DEFAULT NULL,
+  `active` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `id_UNIQUE` (`id` ASC),
-  UNIQUE INDEX `name_UNIQUE` (`name` ASC))
-ENGINE = InnoDB;
+  UNIQUE KEY `idx_name` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
 -- -----------------------------------------------------
 -- Table `scheduler_log`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `scheduler_log` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `scheduled_task_id` INT(11) NOT NULL,
-  `started_at` TIMESTAMP NOT NULL,
-  `ended_at` TIMESTAMP NOT NULL,
-  `output` TEXT NOT NULL,
-  `error` TINYINT(1) NOT NULL DEFAULT 0,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `scheduler_task_id` int(11) unsigned NOT NULL,
+  `started_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `ended_at` timestamp NULL DEFAULT NULL,
+  `output` text COLLATE utf8_unicode_ci NOT NULL,
+  `error` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `id_UNIQUE` (`id` ASC),
-  INDEX `fk_table1_scheduled_task_idx` (`scheduled_task_id` ASC),
-  CONSTRAINT `fk_table1_scheduled_task`
-    FOREIGN KEY (`scheduled_task_id`)
+  KEY `fk_scheduler_log_scheduler_task_id` (`scheduler_task_id`),
+  CONSTRAINT `fk_scheduler_log_scheduler_task_id`
+    FOREIGN KEY (`scheduler_task_id`)
     REFERENCES `scheduler_task` (`id`)
     ON DELETE CASCADE
-    ON UPDATE CASCADE)
-ENGINE = InnoDB;
+    ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci

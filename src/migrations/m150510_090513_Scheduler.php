@@ -3,46 +3,65 @@
 use yii\db\Schema;
 use yii\db\Migration;
 
+/**
+ * Create the scheduler task and log tables.
+ */
 class m150510_090513_Scheduler extends Migration
 {
+    const TABLE_SCHEDULER_LOG = '{{%scheduler_log}}';
+    const TABLE_SCHEDULER_TASK = '{{%scheduler_task}}';
+
+    /**
+     * {@inheritdoc}
+     */
     public function safeUp()
     {
-        $this->createTable('scheduler_log', [
-            'id'=> Schema::TYPE_PK.'',
-            'scheduler_task_id'=> Schema::TYPE_INTEGER.'(11) NOT NULL',
-            'started_at'=> Schema::TYPE_TIMESTAMP.' NOT NULL DEFAULT CURRENT_TIMESTAMP',
-            'ended_at'=> Schema::TYPE_TIMESTAMP.' NOT NULL DEFAULT "0000-00-00 00:00:00"',
-            'output'=> Schema::TYPE_TEXT.' NOT NULL',
-            'error'=> Schema::TYPE_BOOLEAN.'(1) NOT NULL DEFAULT "0"',
-        ], 'ENGINE=InnoDB');
+        $tableOptions = null;
+        if ($this->db->driverName === 'mysql') {
+            // http://stackoverflow.com/questions/766809/whats-the-difference-between-utf8-general-ci-and-utf8-unicode-ci
+            $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
+        }
 
-        $this->createIndex('id_UNIQUE', 'scheduler_log','id',1);
-        $this->createIndex('fk_table1_scheduler_task_idx', 'scheduler_log','scheduler_task_id',0);
+        $this->createTable(self::TABLE_SCHEDULER_TASK, [
+            'id' => $this->primaryKey()->unsigned(),
+            'name' => $this->string()->notNull(),
+            'schedule' => $this->string()->notNull(),
+            'description' => $this->text()->notNull(),
+            'status_id' => $this->integer()->unsigned()->notNull(),
+            'started_at' => $this->timestamp()->null()->defaultValue(null),
+            'last_run' => $this->timestamp()->null()->defaultValue(null),
+            'next_run' => $this->timestamp()->null()->defaultValue(null),
+            'active' => $this->boolean()->notNull()->defaultValue(false),
+        ], $tableOptions);
 
-        $this->createTable('scheduler_task', [
-            'id'=> Schema::TYPE_PK.'',
-            'name'=> Schema::TYPE_STRING.'(45) NOT NULL',
-            'schedule'=> Schema::TYPE_STRING.'(45) NOT NULL',
-            'description'=> Schema::TYPE_TEXT.' NOT NULL',
-            'status_id'=> Schema::TYPE_INTEGER.'(11) NOT NULL',
-            'started_at'=> Schema::TYPE_TIMESTAMP.' NULL DEFAULT NULL',
-            'last_run'=> Schema::TYPE_TIMESTAMP.' NULL DEFAULT NULL',
-            'next_run'=> Schema::TYPE_TIMESTAMP.' NULL DEFAULT NULL',
-            'active'=> Schema::TYPE_BOOLEAN.'(1) NOT NULL DEFAULT "0"',
-        ], 'ENGINE=InnoDB');
+        $this->createIndex('idx_name', self::TABLE_SCHEDULER_TASK, 'name', true);
 
-        $this->createIndex('id_UNIQUE', 'scheduler_task','id',1);
-        $this->createIndex('name_UNIQUE', 'scheduler_task','name',1);
-        $this->addForeignKey('fk_scheduler_log_scheduler_task_id', 'scheduler_log', 'scheduler_task_id', 'scheduler_task', 'id');
+        $this->createTable(self::TABLE_SCHEDULER_LOG, [
+            'id' => $this->bigPrimaryKey()->unsigned(),
+            'scheduler_task_id' => $this->integer()->unsigned()->notNull(),
+            'started_at' => $this->timestamp()->notNull()->defaultExpression('CURRENT_TIMESTAMP'),
+            'ended_at' => $this->timestamp()->defaultValue(null),
+            'output' => $this->text()->notNull(),
+            'error' => $this->boolean()->defaultValue(false),
+        ], $tableOptions);
+
+        $this->addForeignKey(
+            'fk_scheduler_log_scheduler_task_id', // foreign key id
+            self::TABLE_SCHEDULER_LOG,        // this table
+            'scheduler_task_id',              // column in this table
+            self::TABLE_SCHEDULER_TASK,       // foreign table
+            'id',                             // foreign column
+            'CASCADE',                        // on delete
+            'CASCADE'                         // on update
+        );
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function safeDown()
     {
-        $this->delete('scheduler_log');
-        $this->delete('scheduler_task');
-
-        $this->dropForeignKey('fk_scheduler_log_scheduler_task_id', 'scheduler_log');
-        $this->dropTable('scheduler_log');
-        $this->dropTable('scheduler_task');
+        $this->dropTable(self::TABLE_SCHEDULER_LOG);
+        $this->dropTable(self::TABLE_SCHEDULER_TASK);
     }
 }
