@@ -1,12 +1,12 @@
 Yii2 Scheduler
 ==============
 
-A configurable scheduled task manager for [Yii2](http://www.yiiframework.com).
+A configuration-driven scheduled task manager for [Yii2](http://www.yiiframework.com).
 
 This is adapted from [webtoolsnz/yii2-scheduler](https://github.com/webtoolsnz/yii2-scheduler)
 to provide a more configuration-driven approach.
 
-A few differences:
+The main differences:
 
 * webtoolsnz/yii2-scheduler
    * automatically picks up Task classes in the `@app/tasks` folder
@@ -21,7 +21,8 @@ A few differences:
 
 ## Installation
 
-The preferred way to install this extension is through [composer](http://getcomposer.org/download/).
+The preferred way to install this extension is through
+[composer](http://getcomposer.org/download/).
 
 Install using the following command.
 
@@ -29,12 +30,12 @@ Install using the following command.
 $ composer require thamtech/yii2-scheduler
 ```
 
-Now that the  package has been installed you need to configure the module in
-your application
+Now that the package has been installed you need to configure the module in
+your application.
 
 The `config/console.php` file (or the equivalent console config file if you are
 using a different Yii project template) should be updated to reflect the changes
-below
+below:
 
 ```php
 <?php
@@ -68,7 +69,7 @@ below
     ]
 ```
 
-also add this to the top of your `config/console.php` file
+also add this to the top of your `config/console.php` file:
 
 ```php
 \yii\base\Event::on(
@@ -84,7 +85,8 @@ also add this to the top of your `config/console.php` file
 );
 ```
 
-Run the database migrations, which will create the necessary tables for `scheduler`
+Run the database migrations, which will create the necessary tables:
+
 ```bash
 php yii migrate up --migrationPath=vendor/thamtech/yii2-scheduler/src/migrations
 ```
@@ -178,7 +180,10 @@ In your `scheduler` module config within your console app, define the task:
 ```
 
 The above code defines a simple task that runs at the start of every hour, and
-prints "Hello World".
+prints "Hello World". An alternative approach would be to hard-code some or all
+of the properties in your task class (like `schedule`). However, this example
+is more in line with the project's goal of being a more configuration-driven
+approach to defining tasks.
 
 The `$schedule` property of this class defines how often the task will run,
 these are simply [Cron Expression](http://en.wikipedia.org/wiki/Cron#Examples)
