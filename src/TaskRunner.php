@@ -88,6 +88,8 @@ class TaskRunner extends \yii\base\Component
             ]);
             $this->trigger(Task::EVENT_BEFORE_RUN, $event);
             if (!$event->cancel) {
+                $this->initLog();
+                $task->setLog($this->getLog());
                 $task->start();
                 ob_start();
                 try {
@@ -162,11 +164,25 @@ class TaskRunner extends \yii\base\Component
     {
         $model = $this->getTask()->getModel();
         $log = $this->getLog();
+
         $log->started_at = $model->started_at;
         $log->ended_at = date('Y-m-d H:i:s');
         $log->error = $this->error ? 1 : 0;
         $log->output = $output;
-        $log->scheduler_task_id = $model->id;
         $log->save(false);
+    }
+
+    /**
+     * Initialize the log record.
+     */
+    protected function initLog()
+    {
+        $model = $this->getTask()->getModel();
+        $log = $this->getLog();
+
+        $log->scheduler_task_id = $model->id;
+        $log->started_at = date('Y-m-d H:i:s');
+        $log->save(false);
+        $log->refresh();
     }
 }

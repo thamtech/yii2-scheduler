@@ -66,12 +66,33 @@ abstract class Task extends Component
     private $_displayName;
 
     /**
+     * @var \thamtech\scheduler\models\SchedulerLog
+     */
+    private $_log;
+
+    /**
      * The main method that gets invoked whenever a task is ran, any errors that occur
      * inside this method will be captured by the TaskRunner and logged against the task.
      *
      * @return mixed
      */
     abstract public function run();
+
+    /**
+     * @param \thamtech\scheduler\models\SchedulerLog $log
+     */
+    public function setLog($log)
+    {
+        $this->_log = $log;
+    }
+
+    /**
+     * @return SchedulerLog
+     */
+    public function getLog()
+    {
+        return $this->_log;
+    }
 
     /**
      * @param string|\DateTime $currentTime
