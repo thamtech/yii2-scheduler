@@ -79,6 +79,22 @@ class SchedulerTask extends \thamtech\scheduler\models\base\SchedulerTask
     }
 
     /**
+     * Save the next run time
+     *
+     * @param int|null $time unix timestamp of next run time or null to imply NOW()
+     *
+     * @return bool whether the saving succeeded
+     */
+    public function saveNextRunTime($time = null)
+    {
+        if ($time === null) {
+            $time = time();
+        }
+        $this->next_run = date('Y-m-d H:i:s', $time);
+        return $this->save();
+    }
+
+    /**
      * @return string|null
      */
     public function getStatus()
