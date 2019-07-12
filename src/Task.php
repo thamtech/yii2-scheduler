@@ -8,24 +8,23 @@
 
 namespace thamtech\scheduler;
 
-use thamtech\scheduler\events\TaskEvent;
 use thamtech\scheduler\models\SchedulerTask;
-use yii\helpers\StringHelper;
+use yii\base\Component;
 use Cron\CronExpression;
 
 /**
  * Class Task
  * @package thamtech\scheduler
  */
-abstract class Task extends \yii\base\Component
+abstract class Task extends Component
 {
     const EVENT_BEFORE_RUN = 'TaskBeforeRun';
     const EVENT_AFTER_RUN = 'TaskAfterRun';
 
     /**
-     * @var bool create a database lock to ensure the task only runs once
+     * @var Module the scheduler module.
      */
-    public $databaseLock = true;
+    public $scheduler;
 
     /**
      * @var \Exception|null Exception raised during run (if any)
@@ -73,22 +72,13 @@ abstract class Task extends \yii\base\Component
     {
         parent::init();
 
-        $lockName = 'TaskLock'.\yii\helpers\Inflector::camelize(self::className());
-        \yii\base\Event::on(self::className(), self::EVENT_BEFORE_RUN, function ($event) use ($lockName) {
+        $this->on(self::EVENT_BEFORE_RUN, function ($event) {
             /* @var $event TaskEvent */
-            $db = \Yii::$app->db;
-            $result = $db->createCommand("GET_LOCK(:lockname, 1)", [':lockname' => $lockName])->queryScalar();
-
-            if (!$result) {
-                // we didn't get the lock which means the task is still running
-                $event->cancel = true;
-            }
+            $event->cancel = !$this->scheduler->acquireLock();
         });
-        \yii\base\Event::on(self::className(), self::EVENT_AFTER_RUN, function ($event) use ($lockName) {
-            // release the lock
+        $this->on(self::EVENT_AFTER_RUN, function ($event) {
             /* @var $event TaskEvent */
-            $db = \Yii::$app->db;
-            $db->createCommand("RELEASE_LOCK(:lockname, 1)", [':lockname' => $lockName])->queryScalar();
+            $this->scheduler->releaseLock();
         });
     }
 

@@ -39,10 +39,16 @@ below:
 
 ```php
 <?php
+[
     'bootstrap' => ['log', 'scheduler'],
     'modules' => [
         'scheduler' => [
             'class' => 'thamtech\scheduler\Module',
+            
+            // optional: use the 'mutex' application component to acquire a lock
+            // while executing tasks so only one execution of schedule tasks
+            // can be running at a time.
+            'mutex' => 'mutex', 
         ],
     ],
     'components' => [
@@ -66,7 +72,8 @@ below:
                 ],
             ],
         ],
-    ]
+    ],
+];
 ```
 
 also add this to the top of your `config/console.php` file:

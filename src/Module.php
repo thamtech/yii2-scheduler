@@ -11,14 +11,33 @@ namespace thamtech\scheduler;
 use thamtech\scheduler\models\SchedulerLog;
 use thamtech\scheduler\models\SchedulerTask;
 use yii\base\BootstrapInterface;
+use yii\di\Instance;
 use yii\helpers\ArrayHelper;
+use yii\mutex\Mutex;
 use Yii;
 
 /**
  * This is the main Yii2 Scheduler module class.
+ *
+ * @property Task[] $tasks definitions of tasks to be performed
+ *
+ * @property Mutex $mutex a mutex used to ensure that the task scheduler only
+ * has one instance running at a time.
  */
 class Module extends \yii\base\Module implements BootstrapInterface
 {
+    /**
+     * @var string name of mutex to acquire before executing scheduled tasks.
+     * This is only relevant if a mutex component has been set.
+     */
+    public $mutexName = self::class;
+
+    /**
+     * @var int time (in seconds) to wait for a lock to be released.
+     * @see [[Mutex::acquire()]]
+     */
+    public $mutexTimeout = 5;
+
     /**
      * @var array task definitions
      */
@@ -28,6 +47,12 @@ class Module extends \yii\base\Module implements BootstrapInterface
      * @var Task[] array of instantiate tasks
      */
     private $_taskInstances = [];
+
+    /**
+     * @var Mutex a mutex used to ensure that the task scheduler only has one
+     * instance running at a time.
+     */
+    private $_mutex;
 
     /**
      * Bootstrap the console controllers.
@@ -44,6 +69,64 @@ class Module extends \yii\base\Module implements BootstrapInterface
                 'scheduler' => $this,
             ];
         }
+    }
+
+    /**
+     * Sets the mutex component.
+     *
+     * @param Mutex|string|array|null $mutex a Mutex or reference to a Mutex. You may
+     * specify the mutex in terms of a component ID, an Instance object, or
+     * a configuration array for creating the Mutex component. If the "class"
+     * value is not specified in the configuration array, it will use the value
+     * of `yii\mutex\Mutex`.
+     * Set null (default) if you would not like to require acquiring a mutex
+     * before running scheduled tasks.
+     */
+    public function setMutex($mutex)
+    {
+        $this->_mutex = ($mutex === null) ? null : Instance::ensure($mutex, Mutex::class);
+    }
+
+    /**
+     * Gets the mutex component.
+     *
+     * @return Mutex|null
+     */
+    public function getMutex()
+    {
+        return $this->_mutex;
+    }
+
+    /**
+     * Acquires a lock to run scheduled tasks.
+     *
+     * @return bool lock acquiring result.
+     *
+     * @see [[Mutex::acquire()]]
+     */
+    public function acquireLock()
+    {
+        if (empty($this->mutex) || empty($this->mutexName)) {
+            return true;
+        }
+
+        return $this->mutex->acquire($this->mutexName, $this->mutexTimeout);
+    }
+
+    /**
+     * Releases acquired lock.
+     *
+     * @return bool lock release result: false in case named lock was not found.
+     *
+     * @see [[Mutex::release()]]
+     */
+    public function releaseLock()
+    {
+        if (empty($this->mutex) || empty($this->mutexName)) {
+            return true;
+        }
+
+        return $this->mutex->release($this->mutexName);
     }
 
     /**
@@ -112,10 +195,15 @@ class Module extends \yii\base\Module implements BootstrapInterface
             unset($this->_taskInstances[$name]);
         }
 
+        $defaultTaskConfig = [
+            'scheduler' => $this,
+        ];
+
         // establish task instances that are defined but not yet instantiated
         $taskDefinitions = array_diff_key($this->_taskDefinitions, $this->_taskInstances);
         foreach ($taskDefinitions as $name=>$task) {
             if (!($task instanceof Task)) {
+                $task = ArrayHelper::merge($defaultTaskConfig, $task);
                 $task = Yii::createObject($task);
             }
 
