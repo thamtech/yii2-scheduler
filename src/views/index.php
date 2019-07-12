@@ -1,5 +1,11 @@
 <?php
 /**
+ * @copyright Copyright(c) 2016 Webtools Ltd
+ * @copyright Copyright(c) 2018 Thamtech, LLC
+ * @link https://github.com/thamtech/yii2-scheduler
+ * @license https://opensource.org/licenses/MIT
+ *
+ *
  * Index View for scheduled tasks
  *
  * @var \yii\web\View $this

@@ -1,5 +1,10 @@
 <?php
 /**
+ * @copyright Copyright(c) 2018 Thamtech, LLC
+ * @link https://github.com/thamtech/yii2-scheduler
+ * @license https://opensource.org/licenses/MIT
+ *
+ *
  * Task View
  *
  * @var yii\web\View $this

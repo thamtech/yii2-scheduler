@@ -1,3 +1,8 @@
+ -- @copyright Copyright(c) 2016 Webtools Ltd
+ -- @copyright Copyright(c) 2018 Thamtech, LLC
+ -- @link https://github.com/thamtech/yii2-scheduler
+ -- @license https://opensource.org/licenses/MIT
+
 DROP TABLE IF EXISTS `scheduler_log` ;
 DROP TABLE IF EXISTS `scheduler_task` ;
 

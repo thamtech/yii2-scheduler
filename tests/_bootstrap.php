@@ -1,4 +1,9 @@
 <?php
+/**
+ * @copyright Copyright(c) 2016 Webtools Ltd
+ * @link https://github.com/thamtech/yii2-scheduler
+ * @license https://opensource.org/licenses/MIT
+**/
 
 defined('YII_DEBUG') or define('YII_DEBUG', false);
 defined('YII_ENV') or define('YII_ENV', 'test');

@@ -1,4 +1,9 @@
 <?php
+/**
+ * @copyright Copyright(c) 2016 Webtools Ltd
+ * @link https://github.com/thamtech/yii2-scheduler
+ * @license https://opensource.org/licenses/MIT
+**/
 
 if (Yii::$app->user->getIsGuest()) {
     echo \yii\helpers\Html::a('Login', ['/user/security/login']);
