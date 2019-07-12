@@ -11,6 +11,7 @@ namespace thamtech\scheduler;
 use thamtech\scheduler\models\SchedulerLog;
 use thamtech\scheduler\models\SchedulerTask;
 use yii\base\BootstrapInterface;
+use yii\base\Event;
 use yii\di\Instance;
 use yii\helpers\ArrayHelper;
 use yii\mutex\Mutex;
@@ -55,6 +56,11 @@ class Module extends \yii\base\Module implements BootstrapInterface
     private $_mutex;
 
     /**
+     * @var ErrorLogTarget the error log target component
+     */
+    private $_errorLogTarget;
+
+    /**
      * Bootstrap the console controllers.
      *
      * @param \yii\base\Application $app
@@ -69,6 +75,29 @@ class Module extends \yii\base\Module implements BootstrapInterface
                 'scheduler' => $this,
             ];
         }
+
+        $this->_errorLogTarget = Yii::createObject([
+            'categories' => [
+                'yii\base\ErrorException*',
+            ],
+            'class' => ErrorLogTarget::class,
+            'levels' => ['error'],
+            'logVars' => [],
+            'enabled' => false,
+        ]);
+        $app->log->targets[self::class] = $this->_errorLogTarget;
+
+        Event::on(Task::class, Task::EVENT_BEFORE_RUN, function ($event) {
+            /* @var TaskEvent $event */
+            $this->_errorLogTarget->enabled = true;
+            $this->_errorLogTarget->taskRunner = $event->taskRunner;
+        });
+
+        Event::on(Task::class, Task::EVENT_AFTER_RUN, function ($event) {
+            /* @var TaskEvent $event */
+            $this->_errorLogTarget->enabled = false;
+            $this->_errorLogTarget->taskRunner = null;
+        });
     }
 
     /**

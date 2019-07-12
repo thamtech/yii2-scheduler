@@ -11,29 +11,9 @@ namespace thamtech\scheduler;
 /**
  * Class ErrorHandler
  * @package thamtech\scheduler
+ *
+ * @deprecated ErrorLogTarget is now used to capture errors instead.
  */
 class ErrorHandler extends \yii\console\ErrorHandler
 {
-    /**
-     * @var TaskRunner
-     */
-    public $taskRunner;
-
-    /**
-     *  We need to override the register method to inject our own shutdown handler before the internal yii handler
-     *  is registered.
-     */
-    public function register()
-    {
-        register_shutdown_function([$this, 'schedulerShutdownHandler']);
-        return parent::register();
-    }
-
-    public function schedulerShutdownHandler()
-    {
-        $error = error_get_last();
-        if ($this->taskRunner && E_ERROR == $error['type']) {
-            $this->taskRunner->handleError($error['type'], $error['message'], $error['file'], $error['line']);
-        }
-    }
 }

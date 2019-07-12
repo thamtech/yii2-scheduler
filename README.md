@@ -52,9 +52,6 @@ below:
         ],
     ],
     'components' => [
-        'errorHandler' => [
-            'class' => 'thamtech\scheduler\ErrorHandler'
-        ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets' => [

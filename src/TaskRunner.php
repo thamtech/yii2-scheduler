@@ -83,6 +83,7 @@ class TaskRunner extends \yii\base\Component
         if ($task->shouldRun($forceRun)) {
             $event = new TaskEvent([
                 'task' => $task,
+                'taskRunner' => $this,
                 'success' => true,
             ]);
             $this->trigger(Task::EVENT_BEFORE_RUN, $event);
