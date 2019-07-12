@@ -41,6 +41,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
         if ($app instanceof \yii\console\Application && !isset($app->controllerMap[$this->id])) {
             $app->controllerMap[$this->id] = [
                 'class' => 'thamtech\scheduler\console\SchedulerController',
+                'scheduler' => $this,
             ];
         }
     }

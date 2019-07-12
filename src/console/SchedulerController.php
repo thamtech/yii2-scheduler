@@ -42,6 +42,11 @@ class SchedulerController extends Controller
     public $taskName;
 
     /**
+     * @var \thamtech\scheduler\Module the scheduler module
+     */
+    public $scheduler;
+
+    /**
      * @var array Colour map for SchedulerTask status ids
      */
     private $_statusColors = [
@@ -75,20 +80,12 @@ class SchedulerController extends Controller
     }
 
     /**
-     * @return \thamtech\scheduler\Module
-     */
-    private function getScheduler()
-    {
-        return Yii::$app->getModule('scheduler');
-    }
-
-    /**
      * List all tasks
      */
     public function actionIndex()
     {
         // Update task index
-        $this->getScheduler()->getTasks();
+        $this->scheduler->getTasks();
 
         $models = SchedulerTask::find()->all();
 
@@ -114,7 +111,7 @@ class SchedulerController extends Controller
      */
     public function actionRunAll()
     {
-        $tasks = $this->getScheduler()->getTasks();
+        $tasks = $this->scheduler->getTasks();
 
         echo 'Running Tasks:'.PHP_EOL;
 
@@ -146,7 +143,7 @@ class SchedulerController extends Controller
         }
 
         /* @var Task $task */
-        $task = $this->getScheduler()->loadTask($this->taskName);
+        $task = $this->scheduler->loadTask($this->taskName);
 
         if (!$task) {
             throw new InvalidParamException('Invalid taskName');
