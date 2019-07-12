@@ -90,7 +90,7 @@ class SchedulerController extends Controller
 
         $models = SchedulerTask::find()->all();
 
-        echo $this->ansiFormat('Scheduled Tasks', Console::UNDERLINE).PHP_EOL;
+        $this->stdout($this->ansiFormat('Scheduled Tasks', Console::UNDERLINE).PHP_EOL);
 
         foreach ($models as $model) { /* @var SchedulerTask $model */
             $row = sprintf(
@@ -103,7 +103,7 @@ class SchedulerController extends Controller
             );
 
             $color = isset($this->_statusColors[$model->status_id]) ? $this->_statusColors[$model->status_id] : null;
-            echo $this->ansiFormat($row, $color).PHP_EOL;
+            $this->stdout($this->ansiFormat($row, $color).PHP_EOL);
         }
     }
 
@@ -184,19 +184,19 @@ class SchedulerController extends Controller
     private function runTask(Task $task)
     {
         if (!$task->active) {
-            echo sprintf("\tSkipping inactive %s", $task->getDisplayName()).PHP_EOL;
+            $this->stdout(sprintf("\tSkipping inactive %s", $task->getDisplayName()).PHP_EOL);
             return;
         }
 
-        echo sprintf("\tRunning %s...", $task->getDisplayName());
+        $this->stdout(sprintf("\tRunning %s...", $task->getDisplayName()));
         if ($task->shouldRun($this->force)) {
             $runner = new TaskRunner();
             $runner->setTask($task);
             $runner->setLog(new SchedulerLog());
             $runner->runTask($this->force);
-            echo $runner->error ? 'error' : 'done'.PHP_EOL;
+            $this->stdout($runner->error ? 'error' : 'done'.PHP_EOL);
         } else {
-            echo "Task is not due, use --force to run anyway".PHP_EOL;
+            $this->stdout("Task is not due, use --force to run anyway".PHP_EOL);
         }
     }
 }
