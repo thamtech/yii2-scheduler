@@ -16,6 +16,7 @@ use thamtech\scheduler\TaskRunner;
 use Yii;
 use yii\base\InvalidParamException;
 use yii\console\Controller;
+use yii\console\ExitCode;
 use yii\helpers\Console;
 
 
@@ -111,9 +112,14 @@ class SchedulerController extends Controller
      */
     public function actionRunAll()
     {
+        if (!$this->scheduler->acquireLock()) {
+            $this->stdout("Unable to acquire lock. Another scheduler instance may still be running.\n");
+            return ExitCode::UNAVAILABLE;
+        }
+
         $tasks = $this->scheduler->getTasks();
 
-        echo 'Running Tasks:'.PHP_EOL;
+        $this->stdout('Running Tasks:'.PHP_EOL);
 
         $event = new SchedulerEvent([
             'tasks' => $tasks,
@@ -128,9 +134,10 @@ class SchedulerController extends Controller
                 $event->exceptions[] = $task->exception;
             }
         }
+        $this->scheduler->releaseLock();
         $this->trigger(SchedulerEvent::EVENT_AFTER_RUN, $event);
 
-        echo PHP_EOL;
+        $this->stdout(PHP_EOL);
     }
 
     /**
@@ -142,10 +149,16 @@ class SchedulerController extends Controller
             throw new InvalidParamException('taskName must be specified');
         }
 
+        if (!$this->scheduler->acquireLock()) {
+            $this->stdout("Unable to acquire lock. Another scheduler instance may still be running.\n");
+            return ExitCode::UNAVAILABLE;
+        }
+
         /* @var Task $task */
         $task = $this->scheduler->loadTask($this->taskName);
 
         if (!$task) {
+            $this->scheduler->releaseLock();
             throw new InvalidParamException('Invalid taskName');
         }
 
@@ -160,7 +173,9 @@ class SchedulerController extends Controller
             $event->success = false;
             $event->exceptions = [$task->exception];
         }
+        $this->scheduler->releaseLock();
         $this->trigger(SchedulerEvent::EVENT_AFTER_RUN, $event);
+
     }
 
     /**

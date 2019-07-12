@@ -66,23 +66,6 @@ abstract class Task extends Component
     private $_displayName;
 
     /**
-     * @inheritdoc
-     */
-    public function init()
-    {
-        parent::init();
-
-        $this->on(self::EVENT_BEFORE_RUN, function ($event) {
-            /* @var $event TaskEvent */
-            $event->cancel = !$this->scheduler->acquireLock();
-        });
-        $this->on(self::EVENT_AFTER_RUN, function ($event) {
-            /* @var $event TaskEvent */
-            $this->scheduler->releaseLock();
-        });
-    }
-
-    /**
      * The main method that gets invoked whenever a task is ran, any errors that occur
      * inside this method will be captured by the TaskRunner and logged against the task.
      *
