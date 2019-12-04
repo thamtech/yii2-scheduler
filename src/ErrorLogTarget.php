@@ -77,7 +77,7 @@ class ErrorLogTarget extends Target
     /**
      * {{@inheritdoc}}
      */
-    protected function getContextMessage($message)
+    protected function getContextMessage()
     {
         // we don't want a context message to be appended, so we just return
         // an empty string
