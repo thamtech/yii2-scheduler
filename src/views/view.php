@@ -80,7 +80,7 @@ $this->params['breadcrumbs'][] = $model->__toString();
                     'format' => 'raw',
                     'contentOptions' => ['class' => 'text-center'],
                     'value' => function ($m) {
-                        return Html::tag('span', '', [
+                        return Html::tag('span', $m->output, [
                             'class' => $m->error == 0 ? 'text-success glyphicon glyphicon-ok-circle' : 'text-danger glyphicon glyphicon-remove-circle'
                         ]);
                     }
