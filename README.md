@@ -45,10 +45,16 @@ below:
         'scheduler' => [
             'class' => 'thamtech\scheduler\Module',
             
-            // optional: use the 'mutex' application component to acquire a lock
+            // optional: define a mutex component to acquire a lock
             // while executing tasks so only one execution of schedule tasks
             // can be running at a time.
-            'mutex' => 'mutex', 
+            'mutex' => [
+                'class' => 'yii\mutex\MysqlMutex',
+            ], 
+            
+            // OR optionally reference an existing application mutex component,
+            // for example, one named "mutex":
+            // 'mutex' => 'mutex',
         ],
     ],
     'components' => [
