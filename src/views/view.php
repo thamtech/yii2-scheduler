@@ -61,13 +61,7 @@ $this->params['breadcrumbs'][] = $model->__toString();
                 'lastPageLabel' => Yii::t('app', 'Last'),
             ],
             'columns' => [
-                [
-                    'attribute' => 'started_at',
-                    'format' => 'raw',
-                    'value' => function ($m) {
-                        return Html::a(Yii::$app->getFormatter()->asDatetime($m->started_at), ['view-log', 'id' => $m->id]);
-                    }
-                ],
+                'started_at:datetime',
                 'ended_at:datetime',
                 [
                     'label' => 'Duration',
@@ -87,6 +81,18 @@ $this->params['breadcrumbs'][] = $model->__toString();
 
                         return Html::tag('span', '', ['class' => 'glyphicon glyphicon-' . $icon]) . ' ' . $text;
                     }
+                ],
+                [
+                    'class' => 'yii\grid\ActionColumn',
+                    'visibleButtons' => [
+                        'update' => false,
+                        'delete' => false,
+                    ],
+                    'buttons' => [
+                        'view' => function ($url, $model, $key) {
+                            return Html::a('View Details', ['view-log', 'id' => $model->id]);
+                        }
+                    ],
                 ],
             ],
         ]); ?>
