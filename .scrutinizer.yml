@@ -28,9 +28,13 @@ build:
     environment:
         php: 7.3.0
     nodes:
-        my-node:
+        tests-and-coverage:
             services:
                 mysql: 5.7
+        analysis:
+            tests:
+                override:
+                    - php-scrutinizer-run
     dependencies:
         before:
             - composer global require "fxp/composer-asset-plugin" --no-interaction
