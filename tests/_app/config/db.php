@@ -7,7 +7,7 @@
 
 $db = [
     'class' => 'yii\db\Connection',
-    'dsn' => 'mysql:host=localhost;dbname=scheduler_test',
+    'dsn' => 'mysql:host=127.0.0.1;dbname=scheduler_test',
     'username' => 'scheduler_test',
     'password' => 'scheduler_test',
     'charset' => 'utf8',
