@@ -25,6 +25,8 @@ tools:
     php_sim: false
     php_cpd: false
 build:
+    environment:
+        php: 7.3.0
     nodes:
         my-node:
             services:
@@ -39,3 +41,5 @@ build:
     tests:
         override:
             - vendor/bin/codecept run
+checks:
+    php: true
