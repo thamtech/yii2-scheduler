@@ -19,6 +19,11 @@ The main differences:
      enabled (so that it may be controlled programmatically instead of only via
      the scheduler's databse table)
 
+[![Latest Stable Version](https://img.shields.io/packagist/v/thamtech/yii2-scheduler.svg)](https://packagist.org/packages/thamtech/yii2-scheduler)
+[![Build Status](https://img.shields.io/travis/thamtech/yii2-scheduler.svg)](https://travis-ci.org/thamtech/yii2-scheduler)
+[![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/thamtech/yii2-scheduler.svg)](https://scrutinizer-ci.com/g/thamtech/yii2-scheduler/)
+[![Code Coverage](https://img.shields.io/scrutinizer/coverage/g/thamtech/yii2-scheduler.svg)](https://scrutinizer-ci.com/g/thamtech/yii2-scheduler/)
+
 ## Installation
 
 The preferred way to install this extension is through
