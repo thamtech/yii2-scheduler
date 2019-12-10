@@ -13,7 +13,7 @@ $db = [
     'charset' => 'utf8',
 ];
 
-if (getenv('TRAVIS') == true) {
+if (getenv('TRAVIS') == true || getenv('SCRUTINIZER') == true) {
     $db['username'] = 'root';
     $db['password'] = '';
 }
