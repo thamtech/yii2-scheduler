@@ -78,11 +78,14 @@ $this->params['breadcrumbs'][] = $model->__toString();
                 [
                     'label' => 'Result',
                     'format' => 'raw',
-                    'contentOptions' => ['class' => 'text-center'],
+                    'contentOptions' => function ($m) {
+                        return ['class' => $m->error == 0 ? 'text-success' : 'text-danger'];
+                    },
                     'value' => function ($m) {
-                        return Html::tag('span', '', [
-                            'class' => $m->error == 0 ? 'text-success glyphicon glyphicon-ok-circle' : 'text-danger glyphicon glyphicon-remove-circle'
-                        ]);
+                        $icon = $m->error == 0 ? 'ok-circle' : 'remove-circle';
+                        $text = $m->error == 0 ? 'Success' : 'Failure';
+
+                        return Html::tag('span', '', ['class' => 'glyphicon glyphicon-' . $icon]) . ' ' . $text;
                     }
                 ],
             ],
