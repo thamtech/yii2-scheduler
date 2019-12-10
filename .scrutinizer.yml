@@ -24,3 +24,18 @@ tools:
         timeout: 2100
     php_sim: false
     php_cpd: false
+build:
+    nodes:
+        my-node:
+            services:
+                mysql: 5.7
+    dependencies:
+        before:
+            - composer global require "fxp/composer-asset-plugin" --no-interaction
+            - composer install --no-interaction
+            - mysql -e "CREATE DATABASE scheduler_test;"
+            - php tests/_app/yii migrate/up --interactive=0 --migrationPath=src/migrations/
+            - vendor/bin/codecept build
+    tests:
+        override:
+            - vendor/bin/codecept run
