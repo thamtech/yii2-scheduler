@@ -27,10 +27,13 @@ tools:
 build:
     environment:
         php: 7.3.0
+    services:
+        mysql: 5.7
     nodes:
         tests-and-coverage:
-            services:
-                mysql: 5.7
+            tests:
+                override:
+                    - vendor/bin/codecept run
         analysis:
             tests:
                 override:
@@ -42,8 +45,5 @@ build:
             - mysql -e "CREATE DATABASE scheduler_test;"
             - php tests/_app/yii migrate/up --interactive=0 --migrationPath=src/migrations/
             - vendor/bin/codecept build
-    tests:
-        override:
-            - vendor/bin/codecept run
 checks:
     php: true
