@@ -71,8 +71,8 @@ below:
                     'mailer' =>'mailer',
                     'levels' => ['error', 'warning'],
                     'message' => [
-                        'to' => ['wt.alerts@webtools.co.nz'],
-                        'from' => [$params['adminEmail']],
+                        'to' => ['alets@example.com'],
+                        'from' => ['app@example.com'],
                         'subject' => 'Scheduler Error - ####SERVERNAME####'
                     ],
                     'except' => [
