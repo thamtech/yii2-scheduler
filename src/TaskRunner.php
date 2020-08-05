@@ -94,7 +94,6 @@ class TaskRunner extends \yii\base\Component
                 ob_start();
                 try {
                     $this->running = true;
-                    $this->shutdownHandler();
                     $task->run();
                     $this->running = false;
                     $output = ob_get_contents();
@@ -112,19 +111,6 @@ class TaskRunner extends \yii\base\Component
             }
         }
         $task->getModel()->save();
-    }
-
-    /**
-     * If the yii error handler has been overridden with `\thamtech\scheduler\ErrorHandler`,
-     * pass it this instance of TaskRunner, so it can update the state of tasks in the event of a fatal error.
-     */
-    public function shutdownHandler()
-    {
-        $errorHandler = Yii::$app->getErrorHandler();
-
-        if ($errorHandler instanceof \thamtech\scheduler\ErrorHandler) {
-            Yii::$app->getErrorHandler()->taskRunner = $this;
-        }
     }
 
     /**
