@@ -7,6 +7,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](https://semver.org).
 
 
+[v0.5.0]
+--------
+
+### Added
+- Action column with text-based "View Details" link on log list
+
+### Changed
+- Updated Travis CI and Scrutinizer settings
+- Include "Success"/"Failure" text in log result column
+- Replaced `mtdowling/cron-expression` library with `dragonmantank/cron-expression`
+
+
 [v0.4.0]
 --------
 
