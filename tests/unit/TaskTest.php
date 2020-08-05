@@ -10,7 +10,7 @@ namespace thamtech\scheduler\tests;
 
 use \thamtech\scheduler\tests\tasks\AlphabetTask;
 use \thamtech\scheduler\models\SchedulerTask;
-use \yii\codeception\TestCase;
+use Codeception\TestCase\Test as TestCase;
 use AspectMock\Test as test;
 
 
