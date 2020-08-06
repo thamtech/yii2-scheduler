@@ -7,6 +7,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](https://semver.org).
 
 
+[v0.5.1]
+--------
+
+### Changed
+- Allow wider range of `dragonmantank/cron-expression` versions
+
+
 [v0.5.0]
 --------
 
