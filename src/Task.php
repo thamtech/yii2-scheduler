@@ -101,7 +101,20 @@ abstract class Task extends Component
      */
     public function getNextRunDate($currentTime = 'now')
     {
-        return CronExpression::factory($this->schedule)
+        // Let's continue to use the deprecated CronExpression::factory() method
+        // as long as we continue to support dragonmantank/cron-expression
+        // versions before v3.0.2 to avoid compatibility issues.
+        //
+        // Once we require v3.0.2 or higher version of cron-expression, then
+        // we can remove the scrutinizer ignore-deprecated tag and replace
+        //
+        // `CronExpression::factory($this->schedule)`
+        //
+        // with
+        //
+        // `(new CronExpression($this->schedule))`
+        //
+        return /** @scrutinizer ignore-deprecated */ CronExpression::factory($this->schedule)
             ->getNextRunDate($currentTime)
             ->format('Y-m-d H:i:s');
     }
