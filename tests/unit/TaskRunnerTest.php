@@ -13,7 +13,7 @@ use \thamtech\scheduler\TaskRunner;
 use \thamtech\scheduler\models\SchedulerTask;
 use \thamtech\scheduler\models\SchedulerLog;
 use thamtech\scheduler\tests\tasks\ErrorTask;
-use \yii\codeception\TestCase;
+use Codeception\TestCase\Test as TestCase;
 
 class TaskRunnerTest extends TestCase
 {

@@ -9,7 +9,7 @@
 namespace thamtech\scheduler\tests;
 
 use Yii;
-use \yii\codeception\TestCase;
+use Codeception\TestCase\Test as TestCase;
 
 
 class ModuleTest extends TestCase
